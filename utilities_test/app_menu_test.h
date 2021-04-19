@@ -9,7 +9,7 @@ inline void MENU_SuspendAndResumeTest(void)
     {
         SDK_DelayAtLeastUs(2 * 1000 * 1000,CLOCK_GetFreq(kCLOCK_CoreSysClk));
         MENU_Suspend();
-        DISP_SSD1306_Fill(0);
+        DISP_SSD1327_Fill(0);
         SDK_DelayAtLeastUs(2 * 1000 * 1000,CLOCK_GetFreq(kCLOCK_CoreSysClk));
         MENU_Resume();
     }
@@ -17,7 +17,7 @@ inline void MENU_SuspendAndResumeTest(void)
 
 inline void MENU_ExampleProcHandler1(menu_keyOp_t *const _op)
 {
-    extern disp_ssd1306_fb_t dispBuffer;
+    extern disp_ssd1327_fb_t dispBuffer;
 
     if(MENU_BUTTON_MAKE_OP(nl, disp) == *_op)
     {
@@ -26,7 +26,7 @@ inline void MENU_ExampleProcHandler1(menu_keyOp_t *const _op)
         {
             for(uint16_t j = 10; j < 20; ++j)
             {
-                DISP_SSD1306_FB_SetPixelColor(&dispBuffer, i, j, true);
+                DISP_SSD1327_FB_SetPixelColor(&dispBuffer, i, j, 0x08);
             }
         }
         *_op = 0U;

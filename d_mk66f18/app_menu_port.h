@@ -136,7 +136,7 @@
  * @ {
  */
 #if defined(HITSIC_MENU_USE_FRAME_BUFFER) && (HITSIC_MENU_USE_FRAME_BUFFER > 0)
-#include <drv_disp_ssd1306.h>
+#include <drv_disp_ssd1327.h>
 #include <lib_graphic.h>
 #define HITSIC_MENU_DISPLAY_BUFFER_CLEAR() (MENU_FrameBufferClear())
 #define HITSIC_MENU_DISPLAY_PRINT(row, col, str) (MENU_FrameBufferPrint(row, col, str))
