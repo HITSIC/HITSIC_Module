@@ -92,7 +92,7 @@ void RMCALL_RxStatusMachine(rmcall_t *_inst)
 
                     SYSLOG_D("Dummy data can be received with a single transfer. Start rx dummy data.");
                     *((uint16_t*)_inst->rxDataBuffer) = 0U;
-                    _inst->teleport->xfer_rx((void*)(((uint8_t*)&_inst->rxDataBuffer) + 2U), _inst->rxHeaderBuffer.dataSize);
+                    _inst->teleport->xfer_rx((void*)(((uint8_t*)_inst->rxDataBuffer) + 2U), _inst->rxHeaderBuffer.dataSize);
                 }
                 else
                   // if the dummy data size exceeds the capablity of a single transfer:
@@ -105,7 +105,7 @@ void RMCALL_RxStatusMachine(rmcall_t *_inst)
 
                     SYSLOG_D("Dummy data can NOT be received with a single transfer. Start rx dummy data.");
                     *((uint16_t*)_inst->rxDataBuffer) = _inst->rxHeaderBuffer.dataSize - (HITSIC_RMCALL_PUBLIC_BUF_SIZE - 2U);
-                    _inst->teleport->xfer_rx((void*)(((uint8_t*)&_inst->rxDataBuffer) + 2U), HITSIC_RMCALL_PUBLIC_BUF_SIZE - 2U);
+                    _inst->teleport->xfer_rx((void*)(((uint8_t*)_inst->rxDataBuffer) + 2U), HITSIC_RMCALL_PUBLIC_BUF_SIZE - 2U);
                 }
             }
         }
@@ -150,12 +150,12 @@ void RMCALL_RxStatusMachine(rmcall_t *_inst)
             }
             else if (*((uint16_t*)_inst->rxDataBuffer) <= (HITSIC_RMCALL_PUBLIC_BUF_SIZE - 2))
             {
-                _inst->teleport->xfer_rx((void*)(((uint8_t*)&_inst->rxDataBuffer) + 2U), *((uint16_t*)_inst->rxDataBuffer));
+                _inst->teleport->xfer_rx((void*)(((uint8_t*)_inst->rxDataBuffer) + 2U), *((uint16_t*)_inst->rxDataBuffer));
                 *((uint16_t*)_inst->rxDataBuffer) = 0U;
             }
             else
             {
-                _inst->teleport->xfer_rx((void*)(((uint8_t*)&_inst->rxDataBuffer) + 2U), HITSIC_RMCALL_PUBLIC_BUF_SIZE - 2U);
+                _inst->teleport->xfer_rx((void*)(((uint8_t*)_inst->rxDataBuffer) + 2U), HITSIC_RMCALL_PUBLIC_BUF_SIZE - 2U);
                 *((uint16_t*)_inst->rxDataBuffer) -= (HITSIC_RMCALL_PUBLIC_BUF_SIZE - 2U);
             }
         }
