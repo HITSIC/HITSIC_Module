@@ -21,7 +21,7 @@ void RMCALL_TxStatusMachine(rmcall_t *_inst)
         break;
     case rmcall_statusFlag_txHead:
         // tx data here.
-        SYSLOG_D("Tx Head Done, Tx Data. Size = %4.4d.", _inst->txHeaderBuffer.dataSize);
+        SYSLOG_D("Tx head Done, Tx data. Size = %4.4d.", _inst->txHeaderBuffer.dataSize);
         if(0U != _inst->txHeaderBuffer.dataSize)
         {
             _inst->statusFlag  = (_inst->statusFlag & (~rmcall_statusFlag_txHead)) | rmcall_statusFlag_txData;
@@ -29,7 +29,7 @@ void RMCALL_TxStatusMachine(rmcall_t *_inst)
         }
         else
         {
-            SYSLOG_D("No tx data. Tx Done.");
+            SYSLOG_D("No tx data. Tx done.");
             _inst->statusFlag  = _inst->statusFlag & (~rmcall_statusFlag_txBusy);
         }
         break;
@@ -54,18 +54,34 @@ void RMCALL_RxStatusMachine(rmcall_t *_inst)
         // rx data here.
         if(HITSIC_RMCALL_HEADER_MAGIC != _inst->rxHeaderBuffer.magic)
         {
-            SYSLOG_W("Rx Head Magic Error. Expected 0x%8.8x, Got 0x%8.8x.", HITSIC_RMCALL_HEADER_MAGIC, _inst->rxHeaderBuffer.magic);
+            uint8_t const *const ptr_end = ((uint8_t*)&_inst->rxHeaderBuffer) + sizeof(rmcall_header_t);
+            uint8_t const *ptr = ((uint8_t*)&_inst->rxHeaderBuffer) + 1U; // The first DWord is not match for certain.
+            for(; ptr < ptr_end; ++ptr)
+            {
+                uint32_t const cmp_val = HITSIC_RMCALL_HEADER_MAGIC;
+                uint32_t copy_size = (ptr_end - ptr);
+                uint32_t cmp_size = copy_size < 4U ? copy_size : 4U;
+                if(0U == memcmp((void const*)ptr, (void const*)&cmp_val, (size_t*)cmp_size))
+                {
+                    // Header magic pattern is found. Copy valid bytes to the beginning, and wait for rest bytes of header.
+                    memcpy((void*)&_inst->rxHeaderBuffer, (void const*)ptr, (size_t)copy_size);
+                    _inst->teleport->xfer_rx(((uint8_t*)&_inst->rxHeaderBuffer) + copy_size, sizeof(rmcall_header_t) - copy_size);
+                    SYSLOG_I("Rx head magic error, but found magic pattern at last %d bytes. Continue.", copy_size);
+                    break;
+                }
+            }
             _inst->teleport->xfer_rx(&_inst->rxHeaderBuffer, sizeof(rmcall_header_t));
+            SYSLOG_W("Rx head magic error. Expected 0x%8.8x, got 0x%8.8x.", HITSIC_RMCALL_HEADER_MAGIC, _inst->rxHeaderBuffer.magic);
             break;
         }
         
-        SYSLOG_D("Rx Head Done. ID = 0x%4.4x, Size = %4.4d.", _inst->rxHeaderBuffer.handleId, _inst->rxHeaderBuffer.dataSize);
+        SYSLOG_D("Rx head done. ID = 0x%4.4x, size = %4.4d.", _inst->rxHeaderBuffer.handleId, _inst->rxHeaderBuffer.dataSize);
         
         rmcall_handle_t **p_handle = rmcall_isrDict_get(_inst->isrDict, _inst->rxHeaderBuffer.handleId);
         
         if(NULL == p_handle)
         {
-            SYSLOG_W("Rx HandleID 0x%4.4x Not Found.", _inst->rxHeaderBuffer.handleId);
+            SYSLOG_W("Rx handleID 0x%4.4x not found.", _inst->rxHeaderBuffer.handleId);
             _inst->rxHandle = NULL;
             //_inst->rxDataBuffer = NULL;
 
@@ -163,7 +179,7 @@ void RMCALL_RxStatusMachine(rmcall_t *_inst)
         {
             // rx finished. go idle.
             _inst->statusFlag  = _inst->statusFlag & (~rmcall_statusFlag_rxBusy);
-            SYSLOG_D("Rx Data Done.");
+            SYSLOG_D("Rx data done.");
         }
         break;
     default:
@@ -186,7 +202,7 @@ status_t RMCALL_Init(rmcall_t *_inst, rmcall_config_t const * const _config)
     assert(_config->teleport->xferAbort_tx);
     assert(_config->teleport->xferAbort_rx);
 
-    SYSLOG_I("Init Begin. v%d.%d.%d",HITSIC_VERSION_MAJOR(SYS_RMCALL_VERSION),HITSIC_VERSION_MINOR(SYS_RMCALL_VERSION), HITSIC_VERSION_PATCH(SYS_RMCALL_VERSION));
+    SYSLOG_I("Init begin. v%d.%d.%d",HITSIC_VERSION_MAJOR(SYS_RMCALL_VERSION),HITSIC_VERSION_MINOR(SYS_RMCALL_VERSION), HITSIC_VERSION_PATCH(SYS_RMCALL_VERSION));
 
     _inst->teleport = _config->teleport;
 
@@ -203,7 +219,7 @@ status_t RMCALL_Init(rmcall_t *_inst, rmcall_config_t const * const _config)
 
     rmcall_isrDict_init(_inst->isrDict);
 
-    SYSLOG_I("Init Comlpete.");
+    SYSLOG_I("Init comlpete.");
     
     return kStatus_Success;
 }
@@ -227,7 +243,7 @@ status_t RMCALL_HandleInsert(rmcall_t *_inst, rmcall_handle_t *_handle)
     
     if(_handle->handleId > 65533)
     {
-        SYSLOG_W("Insert Fail. Handle ID Out of Range !");
+        SYSLOG_W("Insert fail. Handle ID out of range !");
         return kStatus_Fail; // 65534 & 65535 is used for OOR detection.
     }
 
@@ -267,7 +283,7 @@ status_t RMCALL_CommandSend(rmcall_t *_inst, uint16_t _handleId, void *_data, ui
     _inst->txDataBuffer = _data;
 
     _inst->statusFlag |= rmcall_statusFlag_txHead;
-    SYSLOG_I("Tx Head. ID = 0x%4.4x, Size = %4.4d.", _handleId, _dataSize);
+    SYSLOG_I("Tx head. ID = 0x%4.4x, size = %4.4d.", _handleId, _dataSize);
     ret = _inst->teleport->xfer_tx(&_inst->txHeaderBuffer, sizeof(rmcall_header_t));
 
     return ret;
@@ -284,11 +300,11 @@ status_t RMCALL_CommandRecvEnable(rmcall_t *_inst)
         ret = _inst->teleport->xfer_rx((void*)&_inst->rxHeaderBuffer, sizeof(rmcall_header_t));
         if(kStatus_Success == ret)
         {
-            SYSLOG_I("Recv Enabled.");
+            SYSLOG_I("Recv enabled.");
         }
         else
         {
-            SYSLOG_E("Recv Enable Failed. Transfer Error.");
+            SYSLOG_E("Recv enable failed. Transfer error.");
         }
         
     }
@@ -304,11 +320,11 @@ status_t RMCALL_CommandRecvDisable(rmcall_t *_inst)
     {
         _inst->teleport->xferAbort_rx();
         _inst->statusFlag &= (~rmcall_statusFlag_rxBusy);
-        SYSLOG_I("Recv Disabled.");
+        SYSLOG_I("Recv disabled.");
         return kStatus_Success;
     }
     
-    SYSLOG_W("Recv Disable failed. Rx Busy.");
+    SYSLOG_W("Recv disable failed. Rx is busy.");
     return kStatus_Fail;
 }
 
@@ -323,7 +339,7 @@ void RMCALL_RxIsr(rmcall_t *_inst)
         
     if(0U == (_inst->statusFlag & rmcall_statusFlag_rxBusy))
     {
-        SYSLOG_I("Execute Handle 0x%4.4x.", _inst->rxHeaderBuffer.handleId);
+        SYSLOG_I("Execute handle 0x%4.4x.", _inst->rxHeaderBuffer.handleId);
         // run command
         (*_inst->rxHandle->handler)(_inst->rxDataBuffer, _inst->rxHeaderBuffer.dataSize, _inst->rxHandle->userData);
         // restart rx header
