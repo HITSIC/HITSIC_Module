@@ -18,7 +18,7 @@ void RMCALL_TxStatusMachine(rmcall_t *_inst)
     switch(_inst->statusFlag & rmcall_statusFlag_txBusy)
     {
     case 0: // no tx
-        break;
+        return;
     case rmcall_statusFlag_txHead:
         // tx data here.
         SYSLOG_D("Tx head Done, Tx data. Size = %4.4d.", _inst->txHeaderBuffer.dataSize);
@@ -32,15 +32,15 @@ void RMCALL_TxStatusMachine(rmcall_t *_inst)
             SYSLOG_D("No tx data. Tx done.");
             _inst->statusFlag  = _inst->statusFlag & (~rmcall_statusFlag_txBusy);
         }
-        break;
+        return;
     case rmcall_statusFlag_txData:
         // tx finished. go idle.
         SYSLOG_D("Tx data done. Tx done.");
         _inst->statusFlag  = _inst->statusFlag & (~rmcall_statusFlag_txBusy);
-        break;
+        return;
     default:
         assert(0); // should never end up here.
-        break;
+        return;
     }
 }
 
@@ -61,18 +61,18 @@ void RMCALL_RxStatusMachine(rmcall_t *_inst)
                 uint32_t const cmp_val = HITSIC_RMCALL_HEADER_MAGIC;
                 uint32_t copy_size = (ptr_end - ptr);
                 uint32_t cmp_size = copy_size < 4U ? copy_size : 4U;
-                if(0U == memcmp((void const*)ptr, (void const*)&cmp_val, (size_t*)cmp_size))
+                if(0U == memcmp((void const*)ptr, (void const*)&cmp_val, (size_t)cmp_size))
                 {
                     // Header magic pattern is found. Copy valid bytes to the beginning, and wait for rest bytes of header.
                     memcpy((void*)&_inst->rxHeaderBuffer, (void const*)ptr, (size_t)copy_size);
                     _inst->teleport->xfer_rx(((uint8_t*)&_inst->rxHeaderBuffer) + copy_size, sizeof(rmcall_header_t) - copy_size);
                     SYSLOG_I("Rx head magic error, but found magic pattern at last %d bytes. Continue.", copy_size);
-                    break;
+                    return;
                 }
             }
             _inst->teleport->xfer_rx(&_inst->rxHeaderBuffer, sizeof(rmcall_header_t));
             SYSLOG_W("Rx head magic error. Expected 0x%8.8x, got 0x%8.8x.", HITSIC_RMCALL_HEADER_MAGIC, _inst->rxHeaderBuffer.magic);
-            break;
+            return;
         }
         
         SYSLOG_D("Rx head done. ID = 0x%4.4x, size = %4.4d.", _inst->rxHeaderBuffer.handleId, _inst->rxHeaderBuffer.dataSize);
@@ -150,8 +150,7 @@ void RMCALL_RxStatusMachine(rmcall_t *_inst)
                 _inst->teleport->xfer_rx((void*)_inst->rxDataBuffer, _inst->rxHeaderBuffer.dataSize);
             }
         }
-        
-        break;
+        return;
         
     case rmcall_statusFlag_rxData:
         if(_inst->statusFlag & rmcall_statusFlag_rxIdMissing)
@@ -181,10 +180,10 @@ void RMCALL_RxStatusMachine(rmcall_t *_inst)
             _inst->statusFlag  = _inst->statusFlag & (~rmcall_statusFlag_rxBusy);
             SYSLOG_D("Rx data done.");
         }
-        break;
+        return;
     default:
         assert(0); // should never end up here.
-        break;
+        return;
     }
 }
 
