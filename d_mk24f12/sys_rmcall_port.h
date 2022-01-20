@@ -19,21 +19,6 @@ extern uart_transfer_t UART_BLE_txTransfer;
 #define HITSIC_RMCALL_PUBLIC_BUF_SIZE (256U)
 #define kStatusGroup_RMCALL (201U)
 
-//数据包定义
-__PACKED struct _ECG_Data_Packet_t
-{
-	uint32_t waveform;
-	uint32_t func;
-	uint32_t lead;
-	float voltage;
-	float period;
-};
-typedef struct _ECG_Data_Packet_t ECG_Data_Packet_t;
-//指令宏
-#define GEN_STATUS_ID    0xaaaa
-#define GEN_HSHAKE_ID	 0x5555
-#define ECG_INFO_ID      0xabcd
-
 
 status_t RMCALL_HOST_Tx(void *_data, uint32_t _dataSize);
 status_t RMCALL_HOST_Rx(void *_data, uint32_t _dataSize);
