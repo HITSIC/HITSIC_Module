@@ -27,7 +27,9 @@
 #ifndef UTILITIES_LIB_PIDCTRL_H
 #define UTILITIES_LIB_PIDCTRL_H
 
-#include <inc_stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include "hitsic_common.h"
 
 /*!

@@ -16,7 +16,7 @@
  */
 /**
  * @file 	:	sys_pitmgr.hpp
- * @author  :	Chekhov Mark/马奇科(qq:905497173)
+ * @author  :	Chekhov Ma
  * @version :	v2.0.0
  *
  * @date 	:	v0.4-beta.0 2018.12.20

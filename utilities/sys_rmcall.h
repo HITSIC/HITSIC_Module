@@ -16,11 +16,11 @@
  */
 /**
  * @file 	:	sys_rmcall.hpp
- * @author  :	Chekhov Mark/马奇科(qq:905497173)
- * @version :	v0.1-beta.0
+ * @author  :	Chekhov Ma
+ * @version :	v1.0-beta.0
  *
- * @date 	:	v0.1-beta.0 2020.08.08 马奇科
- * @date    :   v1.0-beta.0 2021.06.25 马奇科
+ * @date 	:	v0.1-beta.0 2020.08.08
+ * @date    :   v1.0-beta.0 2021.06.25
  *
  * @brief   :   远程调用组件
  * 
@@ -28,7 +28,9 @@
 
 #ifndef _SYS_RMCALL_HPP_
 #define _SYS_RMCALL_HPP_
-#include <inc_stdlib.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
 #include "hitsic_common.h"
 
 #if defined(HITSIC_USE_RMCALL) && (HITSIC_USE_RMCALL > 0)
