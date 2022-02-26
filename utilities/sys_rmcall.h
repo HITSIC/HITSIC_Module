@@ -33,8 +33,12 @@
 #include <stdint.h>
 #include "hitsic_common.h"
 
-#if defined(HITSIC_USE_RMCALL) && (HITSIC_USE_RMCALL > 0)
+#if defined(HITSIC_USE_RMCALL) && (HITSIC_USE_RMCALL != 0U)
 #include <sys_rmcall_port.h>
+
+#if defined(RMCALL_TRAILER_CRC32) && (RMCALL_TRAILER_CRC32 != 0U)
+#include "lib_crc32.h"
+#endif // RMCALL_TRAILER_CRC32
 
 #include <m-dict.h>
 
@@ -50,10 +54,14 @@
 /*! @brief Error codes for the RMCALL driver. */
 enum
 {
-    kStatus_RMCALL_TxBusy = MAKE_STATUS(kStatusGroup_RMCALL, 0), /*!< No empty frame buffer in queue to load to CSI. */
-    kStatus_RMCALL_TxError  = MAKE_STATUS(kStatusGroup_RMCALL, 1), /*!< No full frame buffer in queue to read out. */
-    kStatus_RMCALL_RxBusy = MAKE_STATUS(kStatusGroup_RMCALL, 2), /*!< Queue is full, no room to save new empty buffer. */
-    kStatus_RMCALL_RxError = MAKE_STATUS(kStatusGroup_RMCALL, 3), /*!< New frame received and saved to queue. */
+    kStatus_RMCALL_TxBusy = MAKE_STATUS(kStatusGroup_RMCALL, 0),
+    kStatus_RMCALL_TxError  = MAKE_STATUS(kStatusGroup_RMCALL, 1),
+    kStatus_RMCALL_RxBusy = MAKE_STATUS(kStatusGroup_RMCALL, 2),
+    kStatus_RMCALL_RxError = MAKE_STATUS(kStatusGroup_RMCALL, 3),
+#if defined(RMCALL_TRAILER_CRC32) && (RMCALL_TRAILER_CRC32 != 0U)
+    kStatus_RMCALL_PariyError = MAKE_STATUS(kStatusGroup_RMCALL, 3), /*!< CRC check failed. */
+#endif // RMCALL_TRAILER_CRC32
+    
 };
 
 typedef void (*rmcall_handler_t)(void *_recvData, uint16_t _recvSize, void *_userData);
@@ -83,8 +91,27 @@ enum rmcall_statusFlag_t
     rmcall_statusFlag_rxData = 2U << 2U,
     rmcall_statusFlag_rxBusy = 3U << 2U,
 
-    rmcall_statusFlag_rxIdMissing = 1U << 8U,
+    rmcall_statusFlag_rxDataDiscard = 1U << 9U,
 };
+
+
+// enum rmcall_statusFlag_t
+// {
+//     rmcall_statusFlag_txHead = 1U << 0U,
+//     rmcall_statusFlag_txData = 1U << 1U,
+// #if defined(RMCALL_TRAILER_CRC32) && (RMCALL_TRAILER_CRC32 != 0U)
+//     rmcall_statusFlag_txTail = 1U << 2U,
+// #endif // RMCALL_TRAILER_CRC32
+//     rmcall_statusFlag_txBusy = 15U << 0U,
+//     rmcall_statusFlag_rxHead = 1U << 4U,
+//     rmcall_statusFlag_rxData = 1U << 5U,
+//     #if defined(RMCALL_TRAILER_CRC32) && (RMCALL_TRAILER_CRC32 != 0U)
+//     rmcall_statusFlag_rxTail = 1U << 6U,
+// #endif // RMCALL_TRAILER_CRC32
+//     rmcall_statusFlag_rxBusy = 15U << 4U,
+
+//     rmcall_statusFlag_rxDataDiscard = 1U << 9U,
+// };
 
 typedef status_t(*rmcall_transfer_t)(void *_data, uint32_t dataSize);
 typedef void(*rmcall_transferAbort_t)(void);
@@ -124,10 +151,14 @@ typedef struct _rmcall
 
     rmcall_header_t txHeaderBuffer;
     void *txDataBuffer;
+#if defined(RMCALL_TRAILER_CRC32) && (RMCALL_TRAILER_CRC32 != 0U)
+    uint32_t txTailBuffer;
+#endif // RMCALL_TRAILER_CRC32
     rmcall_header_t rxHeaderBuffer;
     void *rxDataBuffer;
-    
-    rmcall_handle_t *rxHandle;
+#if defined(RMCALL_TRAILER_CRC32) && (RMCALL_TRAILER_CRC32 != 0U)
+    uint32_t rxTailBuffer;
+#endif // RMCALL_TRAILER_CRC32
 
     rmcall_isrDict_t isrDict;
 
