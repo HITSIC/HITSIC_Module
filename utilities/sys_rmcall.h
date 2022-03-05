@@ -59,7 +59,7 @@ enum
     kStatus_RMCALL_RxBusy = MAKE_STATUS(kStatusGroup_RMCALL, 2),
     kStatus_RMCALL_RxError = MAKE_STATUS(kStatusGroup_RMCALL, 3),
 #if defined(RMCALL_TRAILER_CRC32) && (RMCALL_TRAILER_CRC32 != 0U)
-    kStatus_RMCALL_PariyError = MAKE_STATUS(kStatusGroup_RMCALL, 3), /*!< CRC check failed. */
+    kStatus_RMCALL_ParityError = MAKE_STATUS(kStatusGroup_RMCALL, 3), /*!< CRC check failed. */
 #endif // RMCALL_TRAILER_CRC32
     
 };

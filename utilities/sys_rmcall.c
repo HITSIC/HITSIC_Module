@@ -248,12 +248,12 @@ status_t RMCALL_CommandSend(rmcall_t *_inst, uint16_t _handleId, void *_data, ui
     _inst->txDataBuffer = _data;
 #if defined(RMCALL_TRAILER_CRC32) && (RMCALL_TRAILER_CRC32 != 0U)
     _inst->txTailBuffer = CRC32_Calculate ((void*)&_inst->txHeaderBuffer, sizeof(rmcall_header_t), 0xffffffffU);
-    _inst->txTailBuffer = CRC32_Calculate((void*)_inst->txDataBuffer, _inst->txHeaderBuffer.dataSize, _inst->txTailBuffer);
+    _inst->txTailBuffer = CRC32_Calculate(_inst->txDataBuffer, _inst->txHeaderBuffer.dataSize, _inst->txTailBuffer);
 #endif // RMCALL_TRAILER_CRC32
     
     _inst->statusFlag |= rmcall_statusFlag_txHead;
     SYSLOG_I("Tx head. ID = 0x%4.4x, size = %4.4d.", _handleId, _dataSize);
-    ret = _inst->teleport->xfer_tx(&_inst->txHeaderBuffer, sizeof(rmcall_header_t));
+    ret = _inst->teleport->xfer_tx((void *)&_inst->txHeaderBuffer, sizeof(rmcall_header_t));
 
     return ret;
 }
