@@ -131,6 +131,114 @@
 
 /* @ } */
 
+/**
+ *  @name 键值数据库
+ *  @ {
+ */
+/*! @brief 是否启用非易失性键值数据库存储支持。 */
+#define TEXTMENU_USE_NVM (1U)
+
+#if defined(TEXTMENU_USE_NVM) && (TEXTMENU_USE_NVM > 0)
+
+#include "drv_ftfx_flash.h"
+
+#include "textmenu_keyop.h"
+
+/**
+ * ********** NVM存储变量定义 **********
+ */
+
+//gl = global
+//rg = region
+//addr = address
+//sect = sector
+/**
+ * @brief : 每个扇区包含的字节数
+ */
+#define TEXTMENU_NVM_SECTOR_SIZE (0u)
+/**
+ * @brief : 全局存储 Global Storage
+ */
+#define TEXTMENU_NVM_GLOBAL_SECT_SIZE (2u)	///< 全局存储区占用的扇区数
+#define TEXTMENU_NVM_GLOBAL_SECT_OFFSET (2u) ///< 全局存储区扇区偏移
+/**
+ * @brief : 局部存储 Region Storage
+ */
+#define TEXTMENU_NVM_REGION_CNT (3) 					///< 局部存储区的数量
+#define TEXTMENU_NVM_REGION_SECT_SIZE  (4u)				///< 每个局部存储区占用的扇区数
+
+#define TEXTMENU_NVM_AddressRead(addr, buf, byteCnt)		FLASH_AddressRead(addr, buf, byteCnt)	///< 读指定地址。必须返回表示操作是否成功的值。
+#define TEXTMENU_NVM_SectorRead(sect, buf)		FLASH_SectorRead(sect, buf)						///< 读指定扇区。sect为扇区号，buf为缓存区。必须返回表示操作是否成功的值。
+#define TEXTMENU_NVM_SectorWrite(sect, buf)		FLASH_SectorWrite(sect, buf)					///< 写指定扇区。sect为扇区号，buf为缓存区。必须返回表示操作是否成功的值。
+#define TEXTMENU_NVM_RETVAL_SUCCESS				kStatus_FTFx_Success							///< flash接口操作成功的返回值。如果返回值不等一此值则表示操作失败，MENU_NVM接口将向上层报告错误（kStatus_Fail）。
+
+extern int32_t menu_currRegionNumAdj[3];
+extern const char menu_itemNameStr_RegnSel[];
+
+/**
+ * @brief : 保存整个菜单到NVM。
+ *
+ * @param  {int32_t} _region :  所选择的局部存储区。
+ */
+void MENU_Data_NvmSave(int32_t _region);
+
+/**
+ * @brief : 保存整个菜单到NVM。
+ * 该函数将使用全局变量 menu_currRegionNum 中保存的局部存储区号。
+ * 
+ * @param {menu_keyOp_t* const} _op : 按键操作接口传入的按键操作
+ */
+void MENU_Data_NvmSave_Boxed(menu_keyOp_t *const _op);
+
+/**
+ * @brief : 从NVM读取整个菜单。
+ *
+ * @param  {int32_t} _region : 所选择的局部存储区。
+ */
+void MENU_Data_NvmRead(int32_t _region);
+
+/**
+ * @brief : 从NVM读取整个菜单。
+ * 该函数将使用全局变量 menu_currRegionNum 中保存的局部存储区号。
+ *
+ * @param {menu_keyOp_t* const} _op : 按键操作接口传入的按键操作
+ */
+void MENU_Data_NvmRead_Boxed(menu_keyOp_t *const _op);
+
+/**
+ * @brief : 保存当前局部存储区号到NVM。
+ * 该数值设置为不自动保存。
+ *
+ */
+void MENU_Data_NvmSaveRegionConfig(void);
+
+/**
+ * @brief : 保存当前局部存储区号到NVM。
+ * 该数值设置为不自动保存。
+ *
+ * @param {menu_keyOp_t* const} _op : 按键操作接口传入的按键操作
+ */
+void MENU_Data_NvmSaveRegionConfig_Boxed(menu_keyOp_t *const _op);
+
+/**
+ * @brief : 从NVM中读取当前局部存储区号。
+ * 该数值设置为不自动保存。
+ *
+ */
+void MENU_Data_NvmReadRegionConfig(void);
+
+/**
+ * @brief : 从NVM中读取当前局部存储区号。
+ * 该数值设置为不自动保存。
+ * 
+ * @param {menu_keyOp_t* const} _op : 按键操作接口传入的按键操作
+ */
+void MENU_Data_NvmReadRegionConfig_Boxed(menu_keyOp_t *const _op);
+
+#endif // ! TEXTMENU_USE_NVM
+
+/* @ } */
+
 
 #endif // ! D_MK24F12_TEXTMENU_PORT_H
 
