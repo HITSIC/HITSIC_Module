@@ -31,7 +31,6 @@ const rmcall_config_t config_host = 	{
 		.teleport = &teleport_host
 };
 
-
 void RMCALL_PORT_Init(void)
 {
 	UART_TransferCreateHandle(HITSIC_RMCALL_UART, &UART_BLE_handle, RMCALL_HOST_CpltCallback, NULL);

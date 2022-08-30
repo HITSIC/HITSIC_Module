@@ -14,11 +14,10 @@ extern uart_handle_t UART_BLE_handle;
 extern uart_transfer_t UART_BLE_rxTransfer;
 extern uart_transfer_t UART_BLE_txTransfer;
 
-#define HITSIC_RMCALL_HEADER_MAGIC 0x554768A0U
+#define RMCALL_HEADER_MAGIC 0x554768A0U
 #define RMCALL_SYSLOG_LVL (3U)
-#define HITSIC_RMCALL_PUBLIC_BUF_SIZE (256U)
+#define RMCALL_PUBLIC_BUF_SIZE (256U)
 #define kStatusGroup_RMCALL (201U)
-
 
 status_t RMCALL_HOST_Tx(void *_data, uint32_t _dataSize);
 status_t RMCALL_HOST_Rx(void *_data, uint32_t _dataSize);
