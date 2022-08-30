@@ -184,3 +184,336 @@ status_t MENU_PORT_KVDB_DeltValue(char const *_key)
 
 /* @ } */
 
+/**
+ *  @name 键值数据库
+ *  @ {
+ */
+#if defined(TEXTMENU_USE_NVM) && (TEXTMENU_USE_NVM > 0)
+
+/*!
+ * @addtogroup menu_nvm
+ * @{
+ */
+#define SYSLOG_TAG  ("MENU.NVM")
+#define SYSLOG_LVL  (TEXTMENU_KVDB_LOG_LVL)
+#include "inc_syslog.h"
+
+#include "textmenu.h"
+
+/**
+ * ********** NVM存储变量定义 **********
+ */
+
+/**
+ * @brief : 每个扇区包含的字节数
+ */
+
+/**
+ * @brief : 全局存储 Global Storage
+ */
+uint32_t menu_nvm_glAddrOffset = TEXTMENU_NVM_GLOBAL_SECT_OFFSET * TEXTMENU_NVM_SECTOR_SIZE;/// 全局存储区地址偏移
+;/// 全局存储区地址偏移
+    
+/**
+ * @brief : 局部存储 Region Storage
+ */
+
+
+// 每个局部存储区占用的扇区数
+uint32_t menu_nvm_rgSectOffset
+[TEXTMENU_NVM_REGION_CNT];/// 三个局部存储区的扇区偏移
+
+uint32_t menu_nvm_rgAddrOffset
+[TEXTMENU_NVM_REGION_CNT];/// 三个局部存储区的地址偏移
+
+/**
+ * @brief : 菜单存储占用的总扇区数
+ */
+uint32_t menu_nvm_totalSectCnt;
+/**
+ * @brief : 每个菜单项保存时占用的字节数
+ */
+uint32_t menu_nvm_dataSize = 32u;
+
+/**
+ * @brief : 菜单项写入缓存。
+ * 当改写第N个扇区时，menu_nvm_cachedSector = N, menu_nvm_cache分配4KB缓存
+ * 并读入第N扇区的所有内容。此时能且仅能修改第N扇区的内容。对第N扇区内容的修改
+ * 将缓存至上述内存。
+ */
+uint8_t *menu_nvm_cache = NULL;
+uint32_t menu_nvm_cachedSector = 0;
+/**
+ * @brief : 菜单进行全局擦除/保存的次数，可用于估计Flash寿命
+ */
+uint32_t menu_nvm_eraseCnt = 0;
+
+int32_t menu_currRegionNumAdj[3] = { 0, 0, TEXTMENU_NVM_REGION_CNT - 1 };
+
+extern menu_list_t *menu_menuRoot;             ///< 根菜单指针。
+
+const char menu_itemNameStr_RegnSel[] = {'R','e','g','n','S','e','l','(','0','-',('0' + TEXTMENU_NVM_REGION_CNT - 1),')','\0'};
+
+
+/**
+ * ********** NVM存储操作接口 **********
+ */
+
+status_t MENU_NvmRead(uint32_t _addr, void *_buf, uint32_t _byteCnt)
+{
+    SYSLOG_D("Read addr = 0x%8.8x, Size = %4.4ld", _addr, _byteCnt);
+    uint32_t result = TEXTMENU_NVM_AddressRead(_addr, _buf, _byteCnt);
+    if (TEXTMENU_NVM_RETVAL_SUCCESS == result)
+    {
+        return kStatus_Success;
+    }
+    else
+    {
+        SYSLOG_E("Read failed. Addr = 0x%8.8x, size = %4.4ld, err = %ld", _addr, _byteCnt, result);
+        return kStatus_Fail;
+    }
+}
+
+bool MENU_NvmCacheable(uint32_t _addr)
+{
+    if (menu_nvm_cache == NULL ||
+            _addr / flash_sectorSize == menu_nvm_cachedSector)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+status_t MENU_NvmCacheSector(uint32_t _sect)
+{
+    if (menu_nvm_cache != NULL)
+    {
+        SYSLOG_E("Cached failed. Sector %2.2ld [-Existing]", _sect);
+        return kStatus_Fail;
+    }
+    menu_nvm_cache = (uint8_t *)malloc(flash_sectorSize);
+    if (menu_nvm_cache == NULL)
+    {
+        SYSLOG_E("Cached failed. Sector %2.2ld [-MemMalloc]", _sect);
+        return kStatus_Fail;
+    }
+    if (TEXTMENU_NVM_RETVAL_SUCCESS !=
+            TEXTMENU_NVM_SectorRead(menu_nvm_cachedSector,
+                    (void *)menu_nvm_cache))
+    {
+        free(menu_nvm_cache);
+        menu_nvm_cache = NULL;
+        SYSLOG_E("Cached failed. Sector %2.2ld [-FlashRead]", _sect);
+        return kStatus_Fail;
+    }
+    menu_nvm_cachedSector = _sect;
+    SYSLOG_V("Cached sector %2.2ld", menu_nvm_cachedSector);
+    return kStatus_Success;
+}
+
+status_t MENU_NvmWriteCache(uint32_t _addr, void *_buf, uint32_t _byteCnt)
+{
+    if (menu_nvm_cache == NULL)
+    {
+        if (TEXTMENU_NVM_RETVAL_SUCCESS !=
+                MENU_NvmCacheSector(_addr / TEXTMENU_NVM_SECTOR_SIZE))
+        {
+            SYSLOG_E("Write failed. Addr = 0x%8.8x, size = %4.4ld", _addr, _byteCnt);
+            return kStatus_Fail;
+        }
+    }
+    memcpy(menu_nvm_cache + _addr % flash_sectorSize, _buf, _byteCnt);
+    SYSLOG_D("Write addr = 0x%8.8x, size = %4.4ld", _addr, _byteCnt);
+    return kStatus_Success;
+}
+
+status_t MENU_NvmUpdateCache(void)
+{
+    if (menu_nvm_cache == NULL)
+    {
+        SYSLOG_W("Update cache failed ! [-CacheEmpty]");
+        return kStatus_Fail;
+    }
+    if (TEXTMENU_NVM_RETVAL_SUCCESS !=
+            TEXTMENU_NVM_SectorWrite(menu_nvm_cachedSector, menu_nvm_cache))
+    {
+        SYSLOG_E("Update cache failed ! [-FlashWrite]");
+        return kStatus_Fail;
+    }
+    free(menu_nvm_cache);
+    menu_nvm_cache = NULL;
+    SYSLOG_D("Update cached sector %2.2ld", menu_nvm_cachedSector);
+    return kStatus_Success;
+}
+
+void MENU_Data_NvmSave(int32_t _region)
+{
+    if(_region < 0 || (uint32_t)_region >= TEXTMENU_NVM_REGION_CNT) { return; }
+    ++menu_nvm_eraseCnt;
+    SYSLOG_I("Data Save Begin");
+    SYSLOG_I("Global Data");
+
+    menu_iterator_t *iter = MENU_IteratorConstruct();
+
+    do{
+        menu_nvmData_t dataBuf;
+        menu_itemIfce_t *thisItem = MENU_IteratorDerefItem(iter);
+        if (thisItem->pptFlag & menuItem_data_global && !(thisItem->pptFlag & menuItem_data_NoSave))
+        {
+            MENU_ItemGetData(thisItem, &dataBuf);
+            uint32_t realAddr = menu_nvm_glAddrOffset + thisItem->saveAddr * sizeof(menu_nvmData_t);
+            if (!MENU_NvmCacheable(realAddr))
+            {
+                MENU_NvmUpdateCache();
+                assert(MENU_NvmCacheable(realAddr));
+            }
+            MENU_NvmWriteCache(realAddr, (void *)&dataBuf, sizeof(menu_nvmData_t));
+        }
+    }while(kStatus_Success == MENU_IteratorIncrease(iter));
+    SYSLOG_I("Global Data End");
+
+    if (menu_currRegionNumAdj[0] < 0 || menu_currRegionNumAdj[0] >= TEXTMENU_NVM_REGION_CNT)
+    {
+        SYSLOG_W("RegionNum illegal! Aborting.");
+        MENU_IteratorDestruct(iter);
+        return;
+    }
+    SYSLOG_I("Nvm Region %d Data", menu_currRegionNumAdj[0]);
+
+    MENU_IteratorSetup(iter);
+
+    do{
+        menu_nvmData_t dataBuf;
+        menu_itemIfce_t *thisItem = MENU_IteratorDerefItem(iter);
+        if (thisItem->pptFlag & menuItem_data_region && !(thisItem->pptFlag & menuItem_data_NoSave))
+        {
+            MENU_ItemGetData(thisItem, &dataBuf);
+            uint32_t realAddr = menu_nvm_rgAddrOffset[_region] + thisItem->saveAddr * sizeof(menu_nvmData_t);
+            if (!MENU_NvmCacheable(realAddr))
+            {
+                MENU_NvmUpdateCache();
+                assert(MENU_NvmCacheable(realAddr));
+            }
+            MENU_NvmWriteCache(realAddr, (void *)&dataBuf, sizeof(menu_nvmData_t));
+        }
+    }while(kStatus_Success == MENU_IteratorIncrease(iter));
+
+    MENU_NvmUpdateCache();
+    SYSLOG_I("Region %d Data End.", menu_currRegionNumAdj[0]);
+    MENU_IteratorDestruct(iter);
+    SYSLOG_I("Save Complete");
+}
+
+void MENU_Data_NvmSave_Boxed(menu_keyOp_t *const _op)
+{
+    MENU_Data_NvmSave(menu_currRegionNumAdj[0]);
+    *_op = 0;
+}
+
+void MENU_Data_NvmRead(int32_t _region)
+{
+    static_assert(sizeof(menu_nvmData_t) == 32, "sizeof menu_nvmData_t error !");
+
+    if(_region < 0 || (uint32_t)_region >= TEXTMENU_NVM_REGION_CNT) { return; }
+    SYSLOG_I("Read Begin");
+    SYSLOG_I("Global Data");
+
+    menu_iterator_t *iter = MENU_IteratorConstruct();
+
+    do{
+        menu_nvmData_t dataBuf;
+        menu_itemIfce_t *thisItem = MENU_IteratorDerefItem(iter);
+        if (thisItem->pptFlag & menuItem_data_global && !(thisItem->pptFlag & menuItem_data_NoLoad))
+        {
+            uint32_t realAddr = menu_nvm_glAddrOffset + thisItem->saveAddr * sizeof(menu_nvmData_t);
+            MENU_NvmRead(realAddr, &dataBuf, sizeof(menu_nvmData_t));
+            SYSLOG_D("Get Flash. menu: %-16.16s addr: %-4.4d data: 0x%-8.8x .", dataBuf.nameStr, thisItem->saveAddr, dataBuf.data);
+            MENU_ItemSetData(thisItem, &dataBuf);
+        }
+    }while(kStatus_Success == MENU_IteratorIncrease(iter));
+
+    SYSLOG_I("Global Data End.");
+    if (menu_currRegionNumAdj[0] < 0 || menu_currRegionNumAdj[0] >= TEXTMENU_NVM_REGION_CNT)
+    {
+        SYSLOG_W("RegionNum illegal! Aborting");
+        MENU_IteratorDestruct(iter);
+        return;
+    }
+    SYSLOG_I("Region %d Data.", menu_currRegionNumAdj[0]);
+
+    MENU_IteratorSetup(iter);
+
+    do{
+        menu_nvmData_t dataBuf;
+        menu_itemIfce_t *thisItem = MENU_IteratorDerefItem(iter);
+        if (thisItem->pptFlag & menuItem_data_region && !(thisItem->pptFlag & menuItem_data_NoLoad))
+        {
+            uint32_t realAddr = menu_nvm_rgAddrOffset[_region] + thisItem->saveAddr * sizeof(menu_nvmData_t);
+            MENU_NvmRead(realAddr, &dataBuf, sizeof(menu_nvmData_t));
+            SYSLOG_D("Get Flash. menu: %-16.16s addr: %-4.4d data: 0x%-8.8x .", dataBuf.nameStr, thisItem->saveAddr, dataBuf.data);
+            MENU_ItemSetData(thisItem, &dataBuf);
+        }
+    }while(kStatus_Success == MENU_IteratorIncrease(iter));
+
+    SYSLOG_I("Region %d Data End", menu_currRegionNumAdj[0]);
+    MENU_IteratorDestruct(iter);
+    SYSLOG_I("Read complete");
+}
+
+void MENU_Data_NvmRead_Boxed(menu_keyOp_t *const _op)
+{
+    MENU_Data_NvmRead(menu_currRegionNumAdj[0]);
+    *_op = 0;
+}
+
+void MENU_Data_NvmSaveRegionConfig(void)
+{
+    SYSLOG_I("Saving region config ...");
+    menu_nvmData_t dataBuf;
+    menu_itemIfce_t *thisItem = MENU_DirGetItem(MENU_DirGetList("/MenuManager"), menu_itemNameStr_RegnSel);
+    MENU_ItemGetData(thisItem, &dataBuf);
+    uint32_t realAddr = menu_nvm_glAddrOffset + thisItem->saveAddr * sizeof(menu_nvmData_t);
+    if (!MENU_NvmCacheable(realAddr))
+    {
+        MENU_NvmUpdateCache();
+        assert(MENU_NvmCacheable(realAddr));
+    }
+    MENU_NvmWriteCache(realAddr, (void *)&dataBuf, sizeof(menu_nvmData_t));
+    MENU_NvmUpdateCache();
+    SYSLOG_I("Save region config complete");
+}
+void MENU_Data_NvmSaveRegionConfig_Boxed(menu_keyOp_t *const _op)
+{
+    MENU_Data_NvmSaveRegionConfig();
+    *_op = 0;
+}
+
+void MENU_Data_NvmReadRegionConfig(void)
+{
+    SYSLOG_I("Reading region config ...");
+    menu_nvmData_t dataBuf;
+    menu_itemIfce_t *thisItem = MENU_DirGetItem(MENU_DirGetList("/MenuManager"), menu_itemNameStr_RegnSel);
+    uint32_t realAddr = menu_nvm_glAddrOffset + thisItem->saveAddr * sizeof(menu_nvmData_t);
+    MENU_NvmRead(realAddr, &dataBuf, sizeof(menu_nvmData_t));
+    MENU_ItemSetData(thisItem, &dataBuf);
+    SYSLOG_I("Read region config complete");
+}
+
+void MENU_Data_NvmReadRegionConfig_Boxed(menu_keyOp_t *const _op)
+{
+    MENU_Data_NvmReadRegionConfig();
+    *_op = 0;
+}
+
+void MENU_NVM_MenuDataSetup(menu_list_t *_list)
+{
+
+}
+
+#endif // ! TEXTMENU_USE_NVM
+
+/* @ } */
+
