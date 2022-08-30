@@ -1,6 +1,6 @@
 #include <sys_pitmgr.h>
 
-#if defined(HITSIC_PITMGR_DEFAULT_IRQ) && (HITSIC_PITMGR_DEFAULT_IRQ > 0)
+#if defined(CMODULE_PITMGR_DEFAULT_IRQ) && (CMODULE_PITMGR_DEFAULT_IRQ > 0)
 
 void LPTMR0_IRQHandler(void)
 {

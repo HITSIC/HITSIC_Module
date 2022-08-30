@@ -101,7 +101,7 @@ SYSLOG仅支持在源文件（\*.c、\*.cpp）中使用。
 定义打印函数。
 
 ```c++
-#define HITSIC_LOG_PRINTF(...)  (printf(__VA_ARGS__))
+#define CMODULE_LOG_PRINTF(...)  (printf(__VA_ARGS__))
 ```
 
 
@@ -109,7 +109,7 @@ SYSLOG仅支持在源文件（\*.c、\*.cpp）中使用。
 定义换行符。
 
 ```c++
-#define HITSIC_LOG_LINEFEED ("\r\n")
+#define CMODULE_LOG_LINEFEED ("\r\n")
 ```
 
 

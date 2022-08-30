@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
 /*!
  * @addtogroup pidctrl
@@ -38,7 +38,7 @@
  */
 
 /** @brief : 软件版本 */
-#define LIB_PIDCTRL_VERSION (HITSIC_MAKE_VERSION(0U, 1U, 0U))
+#define LIB_PIDCTRL_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
 
 //#define assert(...)
 

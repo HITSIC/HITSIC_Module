@@ -29,9 +29,9 @@
 #ifndef UTILITIES_DRV_BUTTON_HPP
 #define UTILITIES_DRV_BUTTON_HPP
 #include <inc_stdlib.h>
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
-#if defined(HITSIC_USE_DRV_BUTTON) && (HITSIC_USE_DRV_BUTTON > 0)
+#if defined(CMODULE_USE_DRV_BUTTON) && (CMODULE_USE_DRV_BUTTON > 0)
 #include <sys_extint.h>
 #include <sys_pitmgr.h>
 #include "drv_button_port.h"
@@ -46,7 +46,7 @@ extern "C"{
 #endif
 
 /** @brief : 软件版本 */
-#define DRV_BUTTON_VERSION (HITSIC_MAKE_VERSION(0u, 3u, 0u))
+#define DRV_BUTTON_VERSION (CMODULE_CMODULE_MAKE_VERSION(0u, 3u, 0u))
 
 typedef enum 
 {
@@ -57,9 +57,9 @@ typedef enum
     //BUTTON_LONG_CLER = 4, ///< service responded long press
     BUTTON_LRPT_PRES = 5, ///< button long_repeat press
     //BUTTON_LRPT_CLER = 6, ///< service responded long_repeat press
-}button_status_t;
+}button_mstatus_t;
 
-typedef void(*button_handler_t)(button_status_t _status, void *_userData);   // (button_t *inst)
+typedef void(*button_handler_t)(button_mstatus_t _status, void *_userData);   // (button_t *inst)
 
 typedef enum
 {
@@ -88,7 +88,7 @@ typedef struct
     button_config_t *config; // TODO: const
     button_interrupt_t intCfg;
     uint64_t msCnt;
-    button_status_t status;
+    button_mstatus_t status;
 }button_t;
 
 void BUTTON_Setup(button_t *_inst, button_config_t *_cfg);
@@ -105,6 +105,6 @@ void BUTTON_PitIsr(button_t *_inst);
 
 /* @} */
 
-#endif // ! HITSIC_USE_DRV_BUTTON
+#endif // ! CMODULE_USE_DRV_BUTTON
 
 #endif // ! UTILITIES_DRV_BUTTON_HPP

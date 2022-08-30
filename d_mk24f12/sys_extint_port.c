@@ -1,6 +1,6 @@
 #include <sys_extint.h>
 
-#if defined(HITSIC_USE_EXTINT) && (HITSIC_USE_EXTINT > 0)
+#if defined(CMODULE_USE_EXTINT) && (CMODULE_USE_EXTINT > 0)
 
 extern extint_t extint_porta, extint_portb, extint_portc, extint_portd, extint_porte;
 
@@ -61,4 +61,4 @@ void PORTE_IRQHandler(void)
 }
 #endif // ! HTISIC_EXTMGR_USE_IRQHANDLER
 
-#endif // ! HITSIC_USE_EXTINT
+#endif // ! CMODULE_USE_EXTINT

@@ -26,9 +26,9 @@
 #ifndef UTILITIES_DRV_CAM_ZF9V034_HPP
 #define UTILITIES_DRV_CAM_ZF9V034_HPP
 
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
-#if (defined(HITSIC_USE_CAM_ZF9V034) && (HITSIC_USE_CAM_ZF9V034 > 0))
+#if (defined(CMODULE_USE_CAM_ZF9V034) && (CMODULE_USE_CAM_ZF9V034 > 0))
 #include  <drv_cam_zf9v034_port.h>
 
 /*!
@@ -37,7 +37,7 @@
  */
 
 /** @brief : 软件版本 */
-#define DRV_CAM_ZF9V034_VERSION (HITSIC_MAKE_VERSION(0U, 1U, 0U))
+#define DRV_CAM_ZF9V034_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
 
 /** @brief : 摄像头命令枚举 */
 enum class cam_zf9v034_cmd_t : uint16_t
@@ -148,6 +148,6 @@ void CAM_ZF9V034_GetReceiverConfig(receiver_config_type *config, const cam_zf9v0
 
 /* @} */
 
-#endif // ! HITSIC_USE_CAM_ZF9V034
+#endif // ! CMODULE_USE_CAM_ZF9V034
 
 #endif // ! UTILITIES_DRV_CAM_ZF9V034_HPP

@@ -2,13 +2,13 @@
 #define D_MK24F12_DRVOLED_H
 #include <sys_pitmgr.h>
 #include <inc_stdlib.h>
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 #include "pin_mux.h"
 
-#define HITSIC_DISP_SSD1306_FLIP_X (0U)	///< 屏幕左右翻转
-#define HITSIC_DISP_SSD1306_FLIP_Y (0U)	///< 屏幕上下翻转
+#define CMODULE_DISP_SSD1306_FLIP_X (0U)	///< 屏幕左右翻转
+#define CMODULE_DISP_SSD1306_FLIP_Y (0U)	///< 屏幕上下翻转
 
-#define HITSIC_DISP_SSD1327_REVERSE 	(0U) 	///< 屏幕旋转180度
+#define CMODULE_DISP_SSD1327_REVERSE 	(0U) 	///< 屏幕旋转180度
 
 #define OLED_SPI_BASE			DISP_SPI_PERIPHERAL
 #define OLED_SPI_CLKFREQ 		DISP_SPI_CLK_FREQ
@@ -17,13 +17,13 @@
 #define OLED_SPI_Ctarn			kDSPI_Ctar0
 #define OLED_SPI_MasterCtarn	kDSPI_MasterCtar0
 
-#if defined(HITSIC_DISP_SSD1306_DMA) && (HITSIC_DISP_SSD1306_DMA > 0U)
+#if defined(CMODULE_DISP_SSD1306_DMA) && (CMODULE_DISP_SSD1306_DMA > 0U)
 #define OLED_SPI_DMA_RX_Chnl    (5U)
 #define OLED_SPI_DMA_IM_Chnl    (6U)
 #define OLED_SPI_DMA_TX_Chnl    (7U)
 #define OLED_SPI_DMA_RX_REQSRC kDmaRequestMux0SPI0Rx
 #define OLED_SPI_DMA_TX_REQSRC  kDmaRequestMux0SPI2Tx
-#endif // ! HITSIC_DISP_SSD1306_DMA
+#endif // ! CMODULE_DISP_SSD1306_DMA
 /**
  * @brief 设置RST脚电平。
  * 
@@ -76,22 +76,22 @@ inline void DISP_SPIBUS_delay_us(uint32_t us)
  * @param data 要发送的数据
  * @param size 数据大小
  */
-status_t DISP_SPIBUS_spiWrite(uint8_t *data, uint32_t size);
+mstatus_t DISP_SPIBUS_spiWrite(uint8_t *data, uint32_t size);
 
 /**
  * @name DMA传输
  * @ {
  */
 /// 启用DMA传输API
-#ifndef HITSIC_DISP_SSD1306_DMA
-#define HITSIC_DISP_SSD1306_DMA (0U)
-#endif // ! HITSIC_DISP_SSD1306_DMA
+#ifndef CMODULE_DISP_SSD1306_DMA
+#define CMODULE_DISP_SSD1306_DMA (0U)
+#endif // ! CMODULE_DISP_SSD1306_DMA
 
-#if defined(HITSIC_DISP_SSD1306_DMA) && (HITSIC_DISP_SSD1306_DMA > 0U)
+#if defined(CMODULE_DISP_SSD1306_DMA) && (CMODULE_DISP_SSD1306_DMA > 0U)
 /**
  * @brief 初始化SPI DMA传输
  */
-status_t DISP_SPIBUS_spiDmaInit(void);
+mstatus_t DISP_SPIBUS_spiDmaInit(void);
 
 
 /**
@@ -100,9 +100,9 @@ status_t DISP_SPIBUS_spiDmaInit(void);
  * @param data 要发送的数据
  * @param size 数据长度
  */
-status_t DISP_SPIBUS_spiDmaWrite(uint8_t* data, uint32_t size);
+mstatus_t DISP_SPIBUS_spiDmaWrite(uint8_t* data, uint32_t size);
 
-#endif // ! HITSIC_DISP_SSD1306_DMA
+#endif // ! CMODULE_DISP_SSD1306_DMA
 
 /* @ } */
 

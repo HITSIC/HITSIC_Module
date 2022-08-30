@@ -17,7 +17,7 @@ by CkovMk @hitsic 2019.10.08
 **改动说明**
 
 - 支持所有FTFX_FLASH单片机。
-- 出于性能考虑，删除了`status_t FLASH_Ram2Flash(uint32_t dst, void\* src, uint32_t size);`和`status_t FLASH_Flash2Ram(void\* dst, uint32_t src, uint32_t size);`两个API。
+- 出于性能考虑，删除了`mstatus_t FLASH_Ram2Flash(uint32_t dst, void\* src, uint32_t size);`和`mstatus_t FLASH_Flash2Ram(void\* dst, uint32_t src, uint32_t size);`两个API。
 
 **开发计划**
 

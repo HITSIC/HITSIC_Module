@@ -32,9 +32,9 @@
 #pragma once
 #ifndef UTILITIES_SYS_PITMGR_HPP
 #define UTILITIES_SYS_PITMGR_HPP
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
-#if defined(HITSIC_USE_PITMGR) && (HITSIC_USE_PITMGR > 0)
+#if defined(CMODULE_USE_PITMGR) && (CMODULE_USE_PITMGR > 0)
 #include <sys_pitmgr_port.h>
 #include <m-list.h>
 
@@ -44,7 +44,7 @@
  */
 
 /** @brief : 软件版本 */
-#define SYS_PITMGR_VERSION (HITSIC_MAKE_VERSION(2U, 0U, 0U))
+#define SYS_PITMGR_VERSION (CMODULE_CMODULE_MAKE_VERSION(2U, 0U, 0U))
 
 #ifdef __cplusplus
 extern "C" {
@@ -88,9 +88,9 @@ typedef struct _pitmgr
  * @brief : PITMGR初始化。
  *  初始化变量、PIT外设、PIT中断。
  *
- * @return {status_t} : 成功返回kStatus_Success，异常返回kStatus_Fail。
+ * @return {mstatus_t} : 成功返回mstatus_Success，异常返回mstatus_Fail。
  */
-status_t PITMGR_Init(pitmgr_t *_inst, uint32_t _period_us);
+mstatus_t PITMGR_Init(pitmgr_t *_inst, uint32_t _period_us);
 
 void PITMGR_Deinit(pitmgr_t *_inst);
 
@@ -105,18 +105,18 @@ void PITMGR_Isr(pitmgr_t *_inst);
  *
  * @param {pitmgr_t*} _inst          : 要操作的PITMGR实例。
  * @param {pitmgr_handle_t*} _handle : 该PITMGR任务的任务描述符指针。
- * @return {status_t}                : 成功返回kStatus_Success，异常返回kStatus_Fail。
+ * @return {mstatus_t}                : 成功返回mstatus_Success，异常返回mstatus_Fail。
  */
-status_t PITMGR_HandleInsert(pitmgr_t *_inst, pitmgr_handle_t *_handle);
+mstatus_t PITMGR_HandleInsert(pitmgr_t *_inst, pitmgr_handle_t *_handle);
 
 /**
  * @brief : 从PITMGR中断表中移除一个任务描述符。
  *
  * @param {pitmgr_t*} _inst          : 要操作的PITMGR实例。
  * @param {pitmgr_handle_t*} _handle : 该PITMGR任务的任务描述符指针。
- * @return {status_t}                : 成功返回kStatus_Success，异常返回kStatus_Fail。
+ * @return {mstatus_t}                : 成功返回mstatus_Success，异常返回mstatus_Fail。
  */
-status_t PITMGR_HandleRemove(pitmgr_t *_inst, pitmgr_handle_t *_handle);
+mstatus_t PITMGR_HandleRemove(pitmgr_t *_inst, pitmgr_handle_t *_handle);
 
 
 #ifdef __cplusplus
@@ -125,6 +125,6 @@ status_t PITMGR_HandleRemove(pitmgr_t *_inst, pitmgr_handle_t *_handle);
 
 /* @} */
 
-#endif // ! HITSIC_USE_PITMGR
+#endif // ! CMODULE_USE_PITMGR
 
 #endif // ! UTILITIES_SYS_PITMGR_HPP

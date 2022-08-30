@@ -31,9 +31,9 @@
 #pragma once
 #ifndef UTILITIES_SYS_EXTINT_HPP
 #define UTILITIES_SYS_EXTINT_HPP
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
-#if defined(HITSIC_USE_EXTINT) && (HITSIC_USE_EXTINT > 0)
+#if defined(CMODULE_USE_EXTINT) && (CMODULE_USE_EXTINT > 0)
 #include <sys_extint_port.h>
 
 #include <m-list.h>
@@ -44,7 +44,7 @@
  */
 
 /** @brief : 软件版本 */
-#define SYS_EXTINT_VERSION (HITSIC_MAKE_VERSION(2U, 0U, 0U))
+#define SYS_EXTINT_VERSION (CMODULE_CMODULE_MAKE_VERSION(2U, 0U, 0U))
 
 #ifdef __cplusplus
 extern "C" {
@@ -75,16 +75,16 @@ typedef struct _extint
  * 该函数在extint_port中实现。
  *
  * @param  {INTC_Type*} : 用于管理 外部中断的外设地址。
- * @return {status_t} : 成功返回kStatus_Success，异常返回kStatus_Fail。
+ * @return {mstatus_t} : 成功返回mstatus_Success，异常返回mstatus_Fail。
  */
 extint_t *EXTINT_GetInst(INTC_Type *base);
 
 /**
  * @brief : EXTINT初始化。
  *
- * @return {status_t} : 成功返回kStatus_Success，异常返回kStatus_Fail。
+ * @return {mstatus_t} : 成功返回mstatus_Success，异常返回mstatus_Fail。
  */
-status_t EXTINT_Init(extint_t *_inst);
+mstatus_t EXTINT_Init(extint_t *_inst);
 
 void EXTINT_Deinit(extint_t *_inst);
 
@@ -99,18 +99,18 @@ void EXTINT_Isr(extint_t *_inst, uint32_t flag);
  *
  * @param {extint_t*} _inst          : 要操作的EXTINT实例。
  * @param {extint_handle_t*} _handle : 该EXTINT任务的任务描述符指针。
- * @return {status_t}                : 成功返回kStatus_Success，异常返回kStatus_Fail。
+ * @return {mstatus_t}                : 成功返回mstatus_Success，异常返回mstatus_Fail。
  */
-status_t EXTINT_HandleInsert(extint_t *_inst, extint_handle_t *_handle);
+mstatus_t EXTINT_HandleInsert(extint_t *_inst, extint_handle_t *_handle);
 
 /**
  * @brief : 从EXTINT中断表中移除一个任务描述符。
  *
  * @param {extint_t*} _inst          : 要操作的EXTINT实例。
  * @param {extint_handle_t*} _handle : 该EXTINT任务的任务描述符指针。
- * @return {status_t}                : 成功返回kStatus_Success，异常返回kStatus_Fail。
+ * @return {mstatus_t}                : 成功返回mstatus_Success，异常返回mstatus_Fail。
  */
-status_t EXTINT_HandleRemove(extint_t *_inst, extint_handle_t *_handle);
+mstatus_t EXTINT_HandleRemove(extint_t *_inst, extint_handle_t *_handle);
 
 #ifdef __cplusplus
 }
@@ -118,7 +118,7 @@ status_t EXTINT_HandleRemove(extint_t *_inst, extint_handle_t *_handle);
 
 /* @} */
 
-#endif // ! HITSIC_USE_EXTINT
+#endif // ! CMODULE_USE_EXTINT
 
 #endif // ! UTILITIES_SYS_EXTINT_HPP
 

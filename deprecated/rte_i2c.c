@@ -1,11 +1,11 @@
-#include <HITSIC_Module/deprecated/rte_i2c.h>
+#include <CMODULE_Module/deprecated/rte_i2c.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-status_t I2C_SimpleInit(I2C_Type* base, uint32_t baudRate_Bps_)
+mstatus_t I2C_SimpleInit(I2C_Type* base, uint32_t baudRate_Bps_)
 {
 	i2c_master_config_t masterConfig;
 	/*
@@ -20,7 +20,7 @@ status_t I2C_SimpleInit(I2C_Type* base, uint32_t baudRate_Bps_)
 	return 0;
 }
 
-status_t I2C_SimpleReadBlocking(I2C_Type* base, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size)
+mstatus_t I2C_SimpleReadBlocking(I2C_Type* base, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size)
 {
 	i2c_master_transfer_t smartcar_i2c_transfer;
 	smartcar_i2c_transfer.slaveAddress = SlaveAddress;
@@ -33,7 +33,7 @@ status_t I2C_SimpleReadBlocking(I2C_Type* base, uint8_t SlaveAddress, uint8_t re
 	return I2C_MasterTransferBlocking(base, &smartcar_i2c_transfer);
 }
 
-status_t I2C_SimpleWriteBlocking(I2C_Type* base, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size)
+mstatus_t I2C_SimpleWriteBlocking(I2C_Type* base, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size)
 {
 	i2c_master_transfer_t smartcar_i2c_transfer;
 	smartcar_i2c_transfer.slaveAddress = SlaveAddress;

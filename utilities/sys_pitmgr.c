@@ -1,6 +1,6 @@
 #include <sys_pitmgr.h>
 
-#if defined(HITSIC_USE_PITMGR) && (HITSIC_USE_PITMGR > 0)
+#if defined(CMODULE_USE_PITMGR) && (CMODULE_USE_PITMGR > 0)
 
 /*!
  * @addtogroup pitmgr
@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 
-status_t PITMGR_Init(pitmgr_t *_inst, uint32_t _period_us)
+mstatus_t PITMGR_Init(pitmgr_t *_inst, uint32_t _period_us)
 {
     assert(_inst);
     assert(_period_us);
@@ -26,7 +26,7 @@ status_t PITMGR_Init(pitmgr_t *_inst, uint32_t _period_us)
 
     HAL_ExitCritical();
 
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
 void PITMGR_Deinit(pitmgr_t *_inst)
@@ -62,7 +62,7 @@ void PITMGR_Isr(pitmgr_t *_inst)
 }
 
 
-status_t PITMGR_HandleInsert(pitmgr_t *_inst, pitmgr_handle_t *_handle)
+mstatus_t PITMGR_HandleInsert(pitmgr_t *_inst, pitmgr_handle_t *_handle)
 {
     assert(_inst);
     assert(_handle);
@@ -71,11 +71,11 @@ status_t PITMGR_HandleInsert(pitmgr_t *_inst, pitmgr_handle_t *_handle)
     pitmgr_isrList_push_back(_inst->isrList, _handle);
     HAL_ExitCritical();
 
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
 
-status_t PITMGR_HandleRemove(pitmgr_t *_inst, pitmgr_handle_t *_handle)
+mstatus_t PITMGR_HandleRemove(pitmgr_t *_inst, pitmgr_handle_t *_handle)
 {
     HAL_EnterCritical();
     pitmgr_isrList_it_t it;
@@ -85,11 +85,11 @@ status_t PITMGR_HandleRemove(pitmgr_t *_inst, pitmgr_handle_t *_handle)
         {
             pitmgr_isrList_remove(_inst->isrList, it);
             HAL_ExitCritical();
-            return kStatus_Success;
+            return mstatus_Success;
         }
     }
     HAL_ExitCritical();
-    return kStatus_Fail;
+    return mstatus_Fail;
 }
 
 
@@ -99,4 +99,4 @@ status_t PITMGR_HandleRemove(pitmgr_t *_inst, pitmgr_handle_t *_handle)
 
 /* @} */
 
-#endif // ! HITSIC_USE_PITMGR
+#endif // ! CMODULE_USE_PITMGR

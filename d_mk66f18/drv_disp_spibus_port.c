@@ -21,7 +21,7 @@ edma_handle_t disp_dspiEdmaMasterIntermediaryToTxRegHandle;
  * @param data 要发送的数据
  * @param size 数据大小
  */
-status_t DISP_SPIBUS_spiWrite(uint8_t *data, uint32_t size)
+mstatus_t DISP_SPIBUS_spiWrite(uint8_t *data, uint32_t size)
 {
 
     oled_spi_xfer.txData = data;
@@ -29,11 +29,11 @@ status_t DISP_SPIBUS_spiWrite(uint8_t *data, uint32_t size)
     return DSPI_MasterTransferBlocking(OLED_SPI_BASE, &oled_spi_xfer);
 }
 
-#if defined(HITSIC_DISP_SSD1306_DMA) && (HITSIC_DISP_SSD1306_DMA > 0U)
+#if defined(CMODULE_DISP_SSD1306_DMA) && (CMODULE_DISP_SSD1306_DMA > 0U)
 
-void DISP_SPIBUS_spiDmaWriteCallback(SPI_Type *base, dspi_master_edma_handle_t *handle, status_t status, void *userData);
+void DISP_SPIBUS_spiDmaWriteCallback(SPI_Type *base, dspi_master_edma_handle_t *handle, mstatus_t status, void *userData);
 
-status_t DISP_SSD1306_spiDmaInit(void)
+mstatus_t DISP_SSD1306_spiDmaInit(void)
 {
     DMAMUX_SetSource(DMAMUX, OLED_SPI_DMA_RX_Chnl,
                          (uint8_t)OLED_SPI_DMA_RX_REQSRC);
@@ -69,23 +69,23 @@ status_t DISP_SSD1306_spiDmaInit(void)
                                             &disp_dspiEdmaMasterTxDataToIntermediaryHandle,
                                             &disp_dspiEdmaMasterIntermediaryToTxRegHandle);
     #endif
-        return kStatus_Success;
+        return mstatus_Success;
 }
 
-status_t DISP_SPIBUS_spiDmaWrite(uint8_t* data, uint32_t size)
+mstatus_t DISP_SPIBUS_spiDmaWrite(uint8_t* data, uint32_t size)
 {
     oled_spi_xfer.txData = data;
     oled_spi_xfer.dataSize = size;
     return DSPI_MasterTransferEDMA(OLED_SPI_BASE, &oled_dspi_edma_m_handle, &oled_spi_xfer);
 }
 
-void DISP_SPIBUS_spiDmaWriteCallback(SPI_Type *base, dspi_master_edma_handle_t *handle, status_t status, void *userData)
+void DISP_SPIBUS_spiDmaWriteCallback(SPI_Type *base, dspi_master_edma_handle_t *handle, mstatus_t status, void *userData)
 {
-    if (status == kStatus_Success)
+    if (status == mstatus_Success)
     {
         //PRINTF("This is DSPI master edma transfer completed callback. \r\n\r\n");
     }
     //isTransferCompleted = true;
 }
 
-#endif // ! HITSIC_DISP_SSD1306_DMA
+#endif // ! CMODULE_DISP_SSD1306_DMA

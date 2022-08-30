@@ -7,3 +7,8 @@
 [submodule "utilities/extlib/TextMenu"]
 	path = utilities/extlib/TextMenu
 	url = https://github.com/CkovMk/TextMenu.git
+[submodule "utilities/extlib/CmBacktrace"]
+	path = utilities/extlib/CmBacktrace
+	url = https://github.com/armink/CmBacktrace.git
+[submodule "utilities/extlib/drv_invimu/"]
+	url = https://github.com/CkovMk/drv_invimu.git

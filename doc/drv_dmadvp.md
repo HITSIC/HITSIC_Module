@@ -181,7 +181,7 @@ struct dmadvp_handle_t
 ### 初始化
 
 - 获取配置数据`dmadvp_config_t`。您可以手动配置，也可以在使用摄像头配置器配置完成摄像头后，调用摄像头配置器的相关API产生此数据。
-- 调用`status_t DMADVP_Init(DMADVP_Type *base, const dmadvp_config_t *config);`函数，初始化DMADVP虚拟设备。
+- 调用`mstatus_t DMADVP_Init(DMADVP_Type *base, const dmadvp_config_t *config);`函数，初始化DMADVP虚拟设备。
 - 调用`void DMADVP_TransferCreateHandle(dmadvp_handle_t *handle, DMADVP_Type *base, edma_callback callback);`函数，初始化传输句柄。
 
 
@@ -190,15 +190,15 @@ struct dmadvp_handle_t
 
 - 为缓存区分配足够的内存
 
-- 调用`status_t DMADVP_TransferSubmitEmptyBuffer(DMADVP_Type *base, dmadvp_handle_t *handle, uint8_t *buffer);`提交空缓存区。
+- 调用`mstatus_t DMADVP_TransferSubmitEmptyBuffer(DMADVP_Type *base, dmadvp_handle_t *handle, uint8_t *buffer);`提交空缓存区。
 
-- 调用`status_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle);`启动传输。传输完成时DMA中断会自动调用您在初始化时注册的`callback`回调函数。
+- 调用`mstatus_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle);`启动传输。传输完成时DMA中断会自动调用您在初始化时注册的`callback`回调函数。
 
-- 在回调函数中，首先调用`void DMADVP_EdmaCallbackService(dmadvp_handle_t *handle, bool transferDone);`进行基础维护，然后调用`status_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle);`停止本次传输。
+- 在回调函数中，首先调用`void DMADVP_EdmaCallbackService(dmadvp_handle_t *handle, bool transferDone);`进行基础维护，然后调用`mstatus_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle);`停止本次传输。
 
   随后判断`transferDone`标志：
 
-  - 如果为真，调用`status_t DMADVP_TransferGetFullBuffer(DMADVP_Type *base, dmadvp_handle_t *handle, uint8_t **buffer);` 获取传输完毕的缓存区；
+  - 如果为真，调用`mstatus_t DMADVP_TransferGetFullBuffer(DMADVP_Type *base, dmadvp_handle_t *handle, uint8_t **buffer);` 获取传输完毕的缓存区；
   - 如果为假，说明传输过程出现了错误，进行错误处理。
 
 
@@ -209,10 +209,10 @@ struct dmadvp_handle_t
 
 - 在回调函数中，进行基础维护之后：
 
-  不要调用`status_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle);`，直接调用`status_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle);`再次启动传输。
+  不要调用`mstatus_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle);`，直接调用`mstatus_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle);`再次启动传输。
 
   - 如果此时空缓存队列不为空，则自动使用其中的缓存区进行下一次传输。
-  - 如果此时空缓存队列已空，上述函数将返回`kStatus_DMADVP_NoEmptyBuffer`。
+  - 如果此时空缓存队列已空，上述函数将返回`mstatus_DMADVP_NoEmptyBuffer`。
 
   随后继续按单缓存中的方法获取传输完毕的缓存区。
 

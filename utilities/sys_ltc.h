@@ -16,14 +16,14 @@
  */
 #ifndef UTILITIES_SYS_LTC_H
 #define UTILITIES_SYS_LTC_H
-#include <hitsic_common.h>
+#include <cmodule_common.h>
 
-#if (defined(HITSIC_USE_LTC) && (HITSIC_USE_LTC != 0U))
+#if (defined(CMODULE_USE_LTC) && (CMODULE_USE_LTC != 0U))
 #include <sys_ltc_port.h>
 
 
 /** @brief : 软件版本 */
-#define SYS_LTC_VERSION (HITSIC_MAKE_VERSION(1U, 0U, 0U))
+#define SYS_LTC_VERSION (CMODULE_CMODULE_MAKE_VERSION(1U, 0U, 0U))
 
 uint64_t LTC_GetTime(void);
 
@@ -66,6 +66,6 @@ void LTC_Delay_us(uint64_t _t);
  */
 void LTC_Delay_ms(uint64_t _t);
 
-#endif // ! HITSIC_USE_LTC
+#endif // ! CMODULE_USE_LTC
 
 #endif // ! UTILITIES_SYS_LTC_H

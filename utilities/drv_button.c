@@ -17,7 +17,7 @@
 
 #include <drv_button.h>
 
-#if defined(HITSIC_USE_DRV_BUTTON) && (HITSIC_USE_DRV_BUTTON > 0)
+#if defined(CMODULE_USE_DRV_BUTTON) && (CMODULE_USE_DRV_BUTTON > 0)
 
  /*!
   * @addtogroup button
@@ -148,4 +148,4 @@ void BUTTON_PitIsr(button_t *_inst)
 
 /* @} */
 
-#endif // ! HITSIC_USE_DRV_BUTTON
+#endif // ! CMODULE_USE_DRV_BUTTON

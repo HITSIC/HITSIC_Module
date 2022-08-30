@@ -1,6 +1,6 @@
 #include <drv_disp_ssd1327.h>
 
-#if defined(HITSIC_USE_DISP_SSD1327) && (HITSIC_USE_DISP_SSD1327 > 0)
+#if defined(CMODULE_USE_DISP_SSD1327) && (CMODULE_USE_DISP_SSD1327 > 0)
 
 #define SYSLOG_TAG  ("DISP_1327")
 #define SYSLOG_LVL  (3U)
@@ -35,8 +35,8 @@ void DISP_SSD1327_SetRowAddress(uint8_t Addr1, uint8_t Addr2)
 
 void DISP_SSD1327_Init(void)
 {
-    SYSLOG_I("Init Begin. v%d.%d.%d",HITSIC_VERSION_MAJOR(DRV_DISP_SSD1327_VERSION),
-                HITSIC_VERSION_MINOR(DRV_DISP_SSD1327_VERSION), HITSIC_VERSION_PATCH(DRV_DISP_SSD1327_VERSION));
+    SYSLOG_I("Init Begin. v%d.%d.%d",CMODULE_VERSION_MAJOR(DRV_DISP_SSD1327_VERSION),
+                CMODULE_VERSION_MINOR(DRV_DISP_SSD1327_VERSION), CMODULE_VERSION_PATCH(DRV_DISP_SSD1327_VERSION));
     DISP_SPIBUS_gpioSetRST(1);
     DISP_SPIBUS_delay_ms(1);
     DISP_SPIBUS_gpioSetRST(0);
@@ -46,11 +46,11 @@ void DISP_SSD1327_Init(void)
     DISP_SSD1327_WriteCmd(0xae);//Set display off
     DISP_SSD1327_WriteCmd(0xa0);//Set re-map
 
-#if defined(HITSIC_DISP_SSD1327_REVERSE) && (HITSIC_DISP_SSD1327_REVERSE > 0)
+#if defined(CMODULE_DISP_SSD1327_REVERSE) && (CMODULE_DISP_SSD1327_REVERSE > 0)
     DISP_SSD1327_WriteCmd(0x40); //0x66旋转180度 0x55正常
-#else // ! HITSIC_DISP_SSD1327_REVERSE
+#else // ! CMODULE_DISP_SSD1327_REVERSE
     DISP_SSD1327_WriteCmd(0x53); //0x66旋转180度 0x55正常
-#endif// ! HITSIC_DISP_SSD1327_REVERSE
+#endif// ! CMODULE_DISP_SSD1327_REVERSE
 
     DISP_SSD1327_WriteCmd(0xa1);//Set display start line
     DISP_SSD1327_WriteCmd(0x00);
@@ -80,12 +80,12 @@ void DISP_SSD1327_Init(void)
     DISP_SSD1327_WriteCmd(0x02);//Enable second pre-charge
     DISP_SSD1327_WriteCmd(0xaf);//Display on
 
-#if defined(HITSIC_DISP_SSD1306_DMA) && (HITSIC_DISP_SSD1306_DMA > 0U)
+#if defined(CMODULE_DISP_SSD1306_DMA) && (CMODULE_DISP_SSD1306_DMA > 0U)
     DISP_SPIBUS_spiDmaInit();
     SYSLOG_D("DMA API enabled.");
 #else
     SYSLOG_D("DMA API disbled.");
-#endif // ! HITSIC_DISP_SSD1306_DMA
+#endif // ! CMODULE_DISP_SSD1306_DMA
 
     SYSLOG_I("Init Comlpete.");
 
@@ -149,6 +149,6 @@ void DISP_SSD1327_BufferUpload(disp_ssd1327_fb_t *_fb)
 }
 
 
-#endif // ! HITSIC_USE_DISP_SSD1327
+#endif // ! CMODULE_USE_DISP_SSD1327
 
 

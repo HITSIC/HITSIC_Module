@@ -26,9 +26,9 @@
 #ifndef UTILITIES_APP_SVBMP_HPP
 #define UTILITIES_APP_SVBMP_HPP
 #include <inc_stdlib.h>
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
-#if (defined(HITSIC_USE_APP_SVBMP) && (HITSIC_USE_APP_SVBMP > 0))
+#if (defined(CMODULE_USE_APP_SVBMP) && (CMODULE_USE_APP_SVBMP > 0))
 #include <app_svbmp_port.h>
 
  /*!
@@ -37,7 +37,7 @@
   */
 
 /** @brief : 软件版本 */
-#define APP_SVBMP_VERSION (HITSIC_MAKE_VERSION(0U, 1U, 0U))
+#define APP_SVBMP_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
 
 typedef enum _camera_pixel_format
 {
@@ -57,6 +57,6 @@ int SVBMP_Save(svbmp_file_t* fp, svbmp_img_t* img);
 
 /* @} */
 
-#endif // ! HITSIC_USE_APP_SVBMP
+#endif // ! CMODULE_USE_APP_SVBMP
 
 #endif // ! UTILITIES_APP_SVBMP_HPP

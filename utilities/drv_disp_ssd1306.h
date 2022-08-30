@@ -33,14 +33,14 @@
 #ifndef UTILITIES_DRV_DISP_SSD1306_HPP
 #define UTILITIES_DRV_DISP_SSD1306_HPP
 #include <inc_stdlib.h>
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
-#if defined(HITSIC_USE_DISP_SSD1306) && (HITSIC_USE_DISP_SSD1306 > 0)
+#if defined(CMODULE_USE_DISP_SSD1306) && (CMODULE_USE_DISP_SSD1306 > 0)
 #include <drv_disp_spibus_port.h>
 #include <lib_graphic.h>
 
 /** @brief : 软件版本 */
-#define DRV_DISP_SSD1306_VERSION (HITSIC_MAKE_VERSION(1U, 0U, 0U))
+#define DRV_DISP_SSD1306_VERSION (CMODULE_CMODULE_MAKE_VERSION(1U, 0U, 0U))
 
 extern const uint8_t DISP_font_6x8[][6];
 extern const uint8_t DISP_font_8x16[][16];
@@ -117,7 +117,7 @@ void DISP_SSD1306_Print_F8x16(uint8_t x,uint8_t y,const char* str);
  */
 void DISP_SSD1306_BufferUpload(uint8_t *buffer);
 
-#if defined(HITSIC_DISP_SSD1306_DMA) && (HITSIC_DISP_SSD1306_DMA > 0U)
+#if defined(CMODULE_DISP_SSD1306_DMA) && (CMODULE_DISP_SSD1306_DMA > 0U)
 
 /**
  * @brief 将帧缓存上传至屏幕显示,DMA方式
@@ -126,12 +126,12 @@ void DISP_SSD1306_BufferUpload(uint8_t *buffer);
  */
 void DISP_SSD1306_BufferUploadDMA(uint8_t *buffer);
 
-#endif // ! HITSIC_DISP_SSD1306_DMA
+#endif // ! CMODULE_DISP_SSD1306_DMA
 
 GRAPHIC_FB_MONO_DEF(disp_ssd1306, DISP_SSD1306, 64, 128)
 
 GRAPHIC_FB_PRINT0608_DEF(disp_ssd1306, DISP_SSD1306)
 
-#endif // ! HITSIC_USE_DISP_SSD1306
+#endif // ! CMODULE_USE_DISP_SSD1306
 
 #endif // ! UTILITIES_DRV_DISP_SSD1306_HPP

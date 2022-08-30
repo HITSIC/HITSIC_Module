@@ -1,11 +1,11 @@
-#include <HITSIC_Module/deprecated/rte_uart.h>
+#include <CMODULE_Module/deprecated/rte_uart.h>
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-status_t UART_SimpleInit(UART_Type* base, uint32_t baudRate_Bps_)
+mstatus_t UART_SimpleInit(UART_Type* base, uint32_t baudRate_Bps_)
 {
 	uart_config_t config;
 	/*

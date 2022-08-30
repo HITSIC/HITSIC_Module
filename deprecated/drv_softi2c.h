@@ -18,7 +18,7 @@
 #ifndef RTE_SI2C_H
 #define RTE_SI2C_H
 
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 #include "drv_softi2c_port.h"
 
 #define PORTxGet(...) (EXTINT_GetPortInst(__VA_ARGS__))
@@ -40,7 +40,7 @@ extern "C" {
  * @brief	软件i2c初始化
  *
  * @param  {SI2C_Type*} base : SI2C_Type对象句柄
- * @return {status_t}         : 错误代码
+ * @return {mstatus_t}         : 错误代码
  * @SampleUsage
  * 			SI2C_Type i2cs0;
  *			i2cs0.nDELAY = 5;
@@ -50,7 +50,7 @@ extern "C" {
  *			i2cs0.SCL_pin = 8;
  *			SI2C_Init(&i2cs0);
  */
-status_t SI2C_Init(SI2C_Type* base);
+mstatus_t SI2C_Init(SI2C_Type* base);
 
 /**
  *
@@ -59,12 +59,12 @@ status_t SI2C_Init(SI2C_Type* base);
  * @param  {uint8_t} reg          : 从机寄存器
  * @param  {uint8_t*} data        : 缓存数组指针
  * @param  {uint32_t} size        : 数据大小
- * @return {status_t}             : 错误代码
+ * @return {mstatus_t}             : 错误代码
  * @SampleUsage
  * 			uint8_t buf[10];
  * 			SI2C_MasterReadBlocking(i2cs0,0x68,0x6A,buf,1);
  */
-status_t SI2C_MasterReadBlocking(SI2C_Type* p, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size);
+mstatus_t SI2C_MasterReadBlocking(SI2C_Type* p, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size);
 
 /**
  *
@@ -73,12 +73,12 @@ status_t SI2C_MasterReadBlocking(SI2C_Type* p, uint8_t SlaveAddress, uint8_t reg
  * @param  {uint8_t} reg          : 从机寄存器
  * @param  {uint8_t*} data        : 数组指针
  * @param  {uint32_t} size        : 数据大小
- * @return {status_t}             : 错误代码
+ * @return {mstatus_t}             : 错误代码
  * @SampleUsage
  * 			uint8_t buf[10];
  * 			SI2C_MasterWriteBlocking(i2cs0,0x68,0x6A,buf,1);
  */
-status_t SI2C_MasterWriteBlocking(SI2C_Type* p, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size);
+mstatus_t SI2C_MasterWriteBlocking(SI2C_Type* p, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size);
 
 /**
  * @brief	内部使用，返回gpio对应的port

@@ -1,6 +1,6 @@
 #include <sys_extint.h>
 
-#if defined(HITSIC_USE_EXTINT) && (HITSIC_USE_EXTINT > 0)
+#if defined(CMODULE_USE_EXTINT) && (CMODULE_USE_EXTINT > 0)
 
 #ifdef __cplusplus
 extern "C"{
@@ -69,4 +69,4 @@ void PORTE_IRQHandler(void)
 }
 #endif
 
-#endif // ! HITSIC_USE_EXTINT
+#endif // ! CMODULE_USE_EXTINT

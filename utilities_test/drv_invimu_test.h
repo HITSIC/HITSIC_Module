@@ -1,12 +1,12 @@
 ﻿#include"drv_imu_invensense.h"
 
-#if (defined(INV_USE_HITSIC_SYSLOG) && (INV_USE_HITSIC_SYSLOG > 0))
+#if (defined(INV_USE_CMODULE_SYSLOG) && (INV_USE_CMODULE_SYSLOG > 0))
 
 #define SYSLOG_LVL (INVIMU_LOG_LVL)
 #define SYSLOG_TAG "INVIMU"
 #include<inc_syslog.h>
 
-#else // INV_USE_HITSIC_SYSLOG
+#else // INV_USE_CMODULE_SYSLOG
 
 #define SYSLOG_A(...) INV_PRINTF("\r\n");
 #define SYSLOG_E(...) INV_PRINTF("\r\n");
@@ -15,7 +15,7 @@
 #define SYSLOG_D(...) INV_PRINTF("\r\n");
 #define SYSLOG_V(...) INV_PRINTF("\r\n");
 
-#endif // ! INV_USE_HITSIC_SYSLOG
+#endif // ! INV_USE_CMODULE_SYSLOG
 int INV_IMU_Example(int argn, char **argv)
 {
     inv_i2c_t i2c0 =

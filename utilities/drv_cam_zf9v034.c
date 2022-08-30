@@ -1,6 +1,6 @@
 #include <drv_cam_zf9v034.h>
 
-#if (defined(HITSIC_USE_CAM_ZF9V034) && (HITSIC_USE_CAM_ZF9V034 > 0))
+#if (defined(CMODULE_USE_CAM_ZF9V034) && (CMODULE_USE_CAM_ZF9V034 > 0))
 
 /*!
  * @addtogroup cam_zf9v034
@@ -8,7 +8,7 @@
  */
 
 #define SYSLOG_TAG  ("ZF9V034")
-#define SYSLOG_LVL  (HITSIC_ZF9V034_LOG_LVL)
+#define SYSLOG_LVL  (CMODULE_ZF9V034_LOG_LVL)
 #include <inc_syslog.h>
 
 uint16_t camera_version;
@@ -56,7 +56,7 @@ void CAM_ZF9V034_CfgWrite(const cam_zf9v034_configPacket_t *config)
 	do {
 	    SYSLOG_D("Attempt to get response.");
 	    camera_uartTxBuf[0] = 0;
-		if(kStatus_Success != CAM_ZF9V034_UartRxBlocking(camera_uartTxBuf, 1))
+		if(mstatus_Success != CAM_ZF9V034_UartRxBlocking(camera_uartTxBuf, 1))
 		{
 		    SYSLOG_W("Failed to get response.");
 		}
@@ -135,4 +135,4 @@ void CAM_ZF9V034_GetReceiverConfig(receiver_config_type *config, const cam_zf9v0
 /* @} */
 
 
-#endif // ! HITSIC_USE_CAM_ZF9V034
+#endif // ! CMODULE_USE_CAM_ZF9V034

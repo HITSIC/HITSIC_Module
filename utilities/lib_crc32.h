@@ -10,7 +10,7 @@
  */
 
 /** @brief : 软件版本 */
-//#define LIB_CRC32_VERSION (HITSIC_MAKE_VERSION(0U, 1U, 0U))
+//#define LIB_CRC32_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
 
 /**
  * @brief Compute the 32-bit CRC.

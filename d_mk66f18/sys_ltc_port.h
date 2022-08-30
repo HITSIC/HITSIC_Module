@@ -1,10 +1,10 @@
 #ifndef D_MK66F18_SYS_LTC_PORT_H
 #define D_MK66F18_SYS_LTC_PORT_H
-#include <hitsic_common.h>
+#include <cmodule_common.h>
 
-#if (defined(HITSIC_USE_LTC) && (HITSIC_USE_LTC != 0U))
+#if (defined(CMODULE_USE_LTC) && (CMODULE_USE_LTC != 0U))
 
-#define HITSIC_LTC_CLKFREQ 60000000UL
+#define CMODULE_LTC_CLKFREQ 60000000UL
 
 /**
  * @brief : 获取LifeTimeCounter当前计时数。
@@ -18,6 +18,6 @@ static inline uint64_t PITMGR_GetTime(void)
     return ULLONG_MAX - PIT_GetLifetimeTimerCount(PIT);
 }
 
-#endif // ! HITSIC_USE_LTC
+#endif // ! CMODULE_USE_LTC
 
 #endif // ! D_MK66F18_SYS_LTC_PORT_H

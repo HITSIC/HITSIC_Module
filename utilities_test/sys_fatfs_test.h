@@ -1,6 +1,6 @@
 #ifndef UTILITIES_TEST_SYS_FATFS_TEST_HPP
 #define UTILITIES_TEST_SYS_FATFS_TEST_HPP
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 #include <inc_stdlib.h>
 
 extern sd_card_t g_sd;
@@ -13,7 +13,7 @@ inline void FATFS_BasicTest(void)
     int32_t bytesWritten = 0;
 
     //SYSMPU_Enable(SYSMPU, false);
-    status_t result = 0;
+    mstatus_t result = 0;
     HAL_EnterCritical();
     BOARD_SD_Config(&g_sd, NULL, BOARD_SDMMC_SD_HOST_IRQ_PRIORITY, NULL);
     HAL_ExitCritical();

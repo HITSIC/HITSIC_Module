@@ -1,6 +1,6 @@
 #include <sys_extint.h>
 
-#if defined(HITSIC_USE_EXTINT) && (HITSIC_USE_EXTINT > 0)
+#if defined(CMODULE_USE_EXTINT) && (CMODULE_USE_EXTINT > 0)
 
 /*!
  * @addtogroup extint
@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-status_t EXTINT_Init(extint_t *_inst)
+mstatus_t EXTINT_Init(extint_t *_inst)
 {
     assert(_inst);
 
@@ -48,7 +48,7 @@ void EXTINT_Isr(extint_t *_inst, uint32_t flag)
 }
 
 
-status_t EXTINT_HandleInsert(extint_t *_inst, extint_handle_t *_handle)
+mstatus_t EXTINT_HandleInsert(extint_t *_inst, extint_handle_t *_handle)
 {
     assert(_inst);
     assert(_handle);
@@ -57,11 +57,11 @@ status_t EXTINT_HandleInsert(extint_t *_inst, extint_handle_t *_handle)
     extint_isrList_push_back(_inst->isrList, _handle);
     HAL_ExitCritical();
 
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
 
-status_t EXTINT_HandleRemove(extint_t *_inst, extint_handle_t *_handle)
+mstatus_t EXTINT_HandleRemove(extint_t *_inst, extint_handle_t *_handle)
 {
     HAL_EnterCritical();
     extint_isrList_it_t it;
@@ -71,11 +71,11 @@ status_t EXTINT_HandleRemove(extint_t *_inst, extint_handle_t *_handle)
         {
             extint_isrList_remove(_inst->isrList, it);
             HAL_ExitCritical();
-            return kStatus_Success;
+            return mstatus_Success;
         }
     }
     HAL_ExitCritical();
-    return kStatus_Fail;
+    return mstatus_Fail;
 }
 
 #ifdef __cplusplus
@@ -84,4 +84,4 @@ status_t EXTINT_HandleRemove(extint_t *_inst, extint_handle_t *_handle)
 
 /* @} */
 
-#endif // ! HITSIC_USE_EXTINT
+#endif // ! CMODULE_USE_EXTINT

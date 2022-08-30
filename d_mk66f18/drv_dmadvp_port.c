@@ -1,6 +1,6 @@
 #include <drv_dmadvp_port.h>
 
-#if defined(HITSIC_USE_DMADVP) && (HITSIC_USE_DMADVP > 0)
+#if defined(CMODULE_USE_DMADVP) && (CMODULE_USE_DMADVP > 0)
 #include "sys_extint.h"
 
 /*!
@@ -37,5 +37,5 @@ DMADVP_Type __DMADVP0 =
 
 /* @} */
 
-#endif // ! HITSIC_USE_DMADVP
+#endif // ! CMODULE_USE_DMADVP
 

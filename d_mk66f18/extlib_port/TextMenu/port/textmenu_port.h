@@ -20,7 +20,7 @@
 
 #include <inc_stdlib.h>
 
-#define kStatusGroup_MENU (205U)
+#define mStatusGroup_MENU (205U)
 
 /**
  * @name 调试输出

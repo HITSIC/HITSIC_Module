@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <profiles version="1">
-<profile kind="CodeFormatterProfile" name="HITSIC_Module-Formatter-Cfg" version="1">
+<profile kind="CodeFormatterProfile" name="CMODULE_Module-Formatter-Cfg" version="1">
 <setting id="org.eclipse.cdt.core.formatter.insert_space_after_opening_paren_in_exception_specification" value="do not insert"/>
 <setting id="org.eclipse.cdt.core.formatter.insert_space_after_pointer_in_method_declaration" value="do not insert"/>
 <setting id="org.eclipse.cdt.core.formatter.format_header_comment" value="true"/>

@@ -1,6 +1,6 @@
 #include <drv_dmadvp.h>
 
-#if defined(HITSIC_USE_DMADVP) && (HITSIC_USE_DMADVP > 0)
+#if defined(CMODULE_USE_DMADVP) && (CMODULE_USE_DMADVP > 0)
 
 /*!
  * @addtogroup dmadvp
@@ -8,15 +8,15 @@
  */
 
 #define SYSLOG_TAG  ("DMADVP")
-#define SYSLOG_LVL  (HITSIC_DMADVP_LOG_LVL)
+#define SYSLOG_LVL  (CMODULE_DMADVP_LOG_LVL)
 #include <inc_syslog.h>
 
 static dmadvp_handle_t *dmadvp_handleList[DMADVP_CNT];
 
-status_t DMADVP_Init(DMADVP_Type *base, const dmadvp_config_t *config)
+mstatus_t DMADVP_Init(DMADVP_Type *base, const dmadvp_config_t *config)
 {
-    SYSLOG_I("Init begin. v%d.%d.%d", HITSIC_VERSION_MAJOR(DRV_DMADVP_VERSION),
-            HITSIC_VERSION_MINOR(DRV_DMADVP_VERSION), HITSIC_VERSION_PATCH(DRV_DMADVP_VERSION));
+    SYSLOG_I("Init begin. v%d.%d.%d", CMODULE_VERSION_MAJOR(DRV_DMADVP_VERSION),
+            CMODULE_VERSION_MINOR(DRV_DMADVP_VERSION), CMODULE_VERSION_PATCH(DRV_DMADVP_VERSION));
     assert(base);
     assert(config);
 
@@ -64,7 +64,7 @@ status_t DMADVP_Init(DMADVP_Type *base, const dmadvp_config_t *config)
     EnableIRQ(base->dmaIrqn);
 
     SYSLOG_I("DMADVP init success.");
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
 //void DMADVP_Deinit(DMADVP_Type *base)
@@ -93,31 +93,31 @@ bool DMADVP_BufferQueFull(dmadvp_bufferQue_t *_buffer)
     return (DMADVP_DRIVER_QUEUE_SIZE == var || -1 ==  var);
 }
 
-status_t DMADVP_BufferQuePush(dmadvp_bufferQue_t *_buffer, uint8_t *_data)
+mstatus_t DMADVP_BufferQuePush(dmadvp_bufferQue_t *_buffer, uint8_t *_data)
 {
     if(DMADVP_BufferQueFull(_buffer))
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     _buffer->buffer[_buffer->bufferTail] = _data;
     if(++_buffer->bufferTail == DMADVP_DRIVER_QUEUE_SIZE + 1U)
     {
         _buffer->bufferTail = 0U;
     }
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
-status_t DMADVP_BufferQuePop(dmadvp_bufferQue_t *_buffer)
+mstatus_t DMADVP_BufferQuePop(dmadvp_bufferQue_t *_buffer)
 {
     if(DMADVP_BufferQueEmpty(_buffer))
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     if(++_buffer->bufferHead == DMADVP_DRIVER_QUEUE_SIZE + 1U)
     {
         _buffer->bufferHead = 0U;
     }
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
 //uint8_t *DMADVP_BufferQueBack(dmadvp_buffer_t *_buffer)
@@ -157,47 +157,47 @@ void DMADVP_TransferCreateHandle(dmadvp_handle_t *handle, DMADVP_Type *base,
     SYSLOG_I("DMADVP create handle complete.");
 }
 
-status_t DMADVP_TransferSubmitEmptyBuffer(DMADVP_Type *base,
+mstatus_t DMADVP_TransferSubmitEmptyBuffer(DMADVP_Type *base,
         dmadvp_handle_t *handle, uint8_t *buffer)
 {
     assert(buffer);
-    status_t ret = DMADVP_BufferQuePush(&handle->emptyBuffer, buffer);
-    if(kStatus_Success != ret)
+    mstatus_t ret = DMADVP_BufferQuePush(&handle->emptyBuffer, buffer);
+    if(mstatus_Success != ret)
     {
         SYSLOG_E("BufferQue \"emptyBuffer\" is full. head = %d, tail = %d", handle->emptyBuffer.bufferHead, handle->emptyBuffer.bufferTail);
         return ret;
     }
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
-status_t DMADVP_TransferGetFullBuffer(DMADVP_Type *base,
+mstatus_t DMADVP_TransferGetFullBuffer(DMADVP_Type *base,
         dmadvp_handle_t *handle, uint8_t **buffer)
 {
     if (DMADVP_BufferQueEmpty(&handle->fullBuffer))
     {
         SYSLOG_D("No full buffer to get !");
-        return kStatus_DMADVP_NoFullBuffer;
+        return mstatus_DMADVP_NoFullBuffer;
     }
     *buffer = DMADVP_BufferQueFront(&handle->fullBuffer);
     //PRINTF("get full buffer: 0x%-8.8x = 0x%-8.8x\n", buffer, handle->fullBuffer.front());
     DMADVP_BufferQuePop(&handle->fullBuffer);
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
-status_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle)
+mstatus_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle)
 {
     SYSLOG_V("Try to start transfer.");
     if (DMADVP_BufferQueEmpty(&handle->emptyBuffer))
     {
         SYSLOG_D("No empty buffer to use !");
-        return kStatus_DMADVP_NoEmptyBuffer;
+        return mstatus_DMADVP_NoEmptyBuffer;
     }
-    status_t result = 0;
+    mstatus_t result = 0;
     EDMA_PrepareTransfer(&handle->xferCfg, (void*) (base->dmaDataAddress), 1,
             DMADVP_BufferQueFront(&handle->emptyBuffer), 1, 1, base->imgSize, kEDMA_PeripheralToMemory);
     DMADVP_BufferQuePop(&handle->emptyBuffer);
     result = EDMA_SubmitTransfer(&handle->dmaHandle, &handle->xferCfg);
-    if(kStatus_Success != result)
+    if(mstatus_Success != result)
     {
         SYSLOG_W("Submit DMA transfer failed (%8.8x) !", result);
         return result;
@@ -217,7 +217,7 @@ status_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle)
         SYSLOG_V("First-time start. Sync to VSNC.");
     }
     SYSLOG_V("Start transfer success.");
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
 void DMADVP_TransferStop(DMADVP_Type *base, dmadvp_handle_t *handle)
@@ -247,7 +247,7 @@ void DMADVP_EdmaCallbackService(dmadvp_handle_t *handle, bool transferDone)
 {
     if (transferDone)
     {
-        if(kStatus_Success != DMADVP_BufferQuePush(&handle->fullBuffer, (uint8_t*)(handle->xferCfg.destAddr)))
+        if(mstatus_Success != DMADVP_BufferQuePush(&handle->fullBuffer, (uint8_t*)(handle->xferCfg.destAddr)))
         {
             SYSLOG_E("BufferQue \"fullBuffer\" is full. head = %d, tail = %d", handle->fullBuffer.bufferHead, handle->fullBuffer.bufferTail);
         }
@@ -263,4 +263,4 @@ void DMADVP_EdmaCallbackService(dmadvp_handle_t *handle, bool transferDone)
 
 /* @} */
 
-#endif // ! HITSIC_USE_DMADVP
+#endif // ! CMODULE_USE_DMADVP

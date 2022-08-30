@@ -1,9 +1,9 @@
 #ifndef D_MK66F18_DRV_DMADVP_PORT_H
 #define D_MK66F18_DRV_DMADVP_PORT_H
 
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
-#if defined(HITSIC_USE_DMADVP) && (HITSIC_USE_DMADVP > 0)
+#if defined(CMODULE_USE_DMADVP) && (CMODULE_USE_DMADVP > 0)
 #include <sys_extint.h>
 
 /*!
@@ -11,9 +11,9 @@
  * @{
  */
 
-#define HITSIC_DMADVP_LOG_LVL  (3U)
+#define CMODULE_DMADVP_LOG_LVL  (3U)
 
-#define kStatusGroup_DMADVP (200U)
+#define mStatusGroup_DMADVP (200U)
 
 #ifndef DMADVP_DRIVER_QUEUE_SIZE
 #define DMADVP_DRIVER_QUEUE_SIZE 4
@@ -74,6 +74,6 @@ inline uint32_t DMADVP_GetInstance(DMADVP_Type* base)
 
 /* @} */
 
-#endif // ! HITSIC_USE_DMADVP
+#endif // ! CMODULE_USE_DMADVP
 
 #endif // ! D_MK66F18_DRV_DMADVP_PORT_H

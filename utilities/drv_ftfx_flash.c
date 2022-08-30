@@ -25,7 +25,7 @@
 
 #include <drv_ftfx_flash.h>
 
-#if defined(HITSIC_USE_FTFX_FLASH) && (HITSIC_USE_FTFX_FLASH > 0)
+#if defined(CMODULE_USE_FTFX_FLASH) && (CMODULE_USE_FTFX_FLASH > 0)
 
 #define SYSLOG_TAG  ("FTFX_FLASH")
 #define SYSLOG_LVL  (3U)
@@ -46,12 +46,12 @@ extern "C" {
 	uint32_t flash_sectorSize = 0;
 
 
-	status_t FLASH_SimpleInit(void)
+	mstatus_t FLASH_SimpleInit(void)
 	{
-	    SYSLOG_I("Init Begin. v%d.%d.%d",HITSIC_VERSION_MAJOR(DRV_FTFX_FLASH_VERSION),
-	            HITSIC_VERSION_MINOR(DRV_FTFX_FLASH_VERSION), HITSIC_VERSION_PATCH(DRV_FTFX_FLASH_VERSION));
+	    SYSLOG_I("Init Begin. v%d.%d.%d",CMODULE_VERSION_MAJOR(DRV_FTFX_FLASH_VERSION),
+	            CMODULE_VERSION_MINOR(DRV_FTFX_FLASH_VERSION), CMODULE_VERSION_PATCH(DRV_FTFX_FLASH_VERSION));
 		/* Return code from each flash driver function */
-		status_t result;
+		mstatus_t result;
 		flash_securityStatus = kFTFx_SecurityStateNotSecure;
 		/* Clean up Flash, Cache driver Structure*/
 		memset(&flash_config, 0, sizeof(flash_config_t));
@@ -110,7 +110,7 @@ extern "C" {
 
 
 
-	status_t FLASH_AddressRead(uint32_t _addr, void* _buf, uint32_t _byteCnt)
+	mstatus_t FLASH_AddressRead(uint32_t _addr, void* _buf, uint32_t _byteCnt)
 	{
 		assert(_buf);
 		assert(_byteCnt);
@@ -121,7 +121,7 @@ extern "C" {
 		}
 		if ((_addr + _byteCnt - 1) / flash_sectorSize != _addr / flash_sectorSize)
 		{
-			return kStatus_FTFx_SizeError;
+			return mstatus_FTFx_SizeError;
 		}
 
 		/* Post-preparation work about flash Cache/Prefetch/Speculation. */
@@ -140,7 +140,7 @@ extern "C" {
 		{
 			((uint8_t*)_buf)[i] = *(volatile uint8_t*)(destAdrss + i);
 		}
-		return kStatus_FTFx_Success;
+		return mstatus_FTFx_Success;
 
 	}
 
@@ -148,12 +148,12 @@ extern "C" {
 
 
 
-	status_t FLASH_AddressProgram(uint32_t _addr, void* _buf, uint32_t _byteCnt)
+	mstatus_t FLASH_AddressProgram(uint32_t _addr, void* _buf, uint32_t _byteCnt)
 	{
 		assert(_buf);
         assert(_byteCnt);
 		uint32_t destAdrss = FLASH_GetPhysicalAddress(_addr);
-		status_t result;
+		mstatus_t result;
 		uint32_t failAddr, failDat;
 		if (kFTFx_SecurityStateNotSecure != flash_securityStatus)
 		{
@@ -161,7 +161,7 @@ extern "C" {
 		}
 		if ((_addr + _byteCnt - 1) / flash_sectorSize != _addr / flash_sectorSize)
 		{
-			return kStatus_FTFx_SizeError;
+			return mstatus_FTFx_SizeError;
 		}
 
 		/* Pre-preparation work about flash Cache/Prefetch/Speculation. */
@@ -179,10 +179,10 @@ extern "C" {
 
 
 
-	status_t FLASH_SectorErase(uint32_t _sect)
+	mstatus_t FLASH_SectorErase(uint32_t _sect)
 	{
 		uint32_t destAdrss = FLASH_GetPhysicalAddress(_sect * flash_sectorSize);
-		status_t result;
+		mstatus_t result;
 		if (kFTFx_SecurityStateNotSecure != flash_securityStatus)
 		{
 			return flash_securityStatus;
@@ -204,7 +204,7 @@ extern "C" {
 
 
 
-	status_t FLASH_SectorRead(uint32_t sector, void* _buf)
+	mstatus_t FLASH_SectorRead(uint32_t sector, void* _buf)
 	{
 		return FLASH_AddressRead(sector * flash_sectorSize, _buf, flash_sectorSize);
 	}
@@ -213,7 +213,7 @@ extern "C" {
 
 
 
-	status_t FLASH_SectorProgram(uint32_t sector, void* _buf)
+	mstatus_t FLASH_SectorProgram(uint32_t sector, void* _buf)
 	{
 		return FLASH_AddressProgram(sector * flash_sectorSize, _buf, flash_sectorSize);
 	}
@@ -222,9 +222,9 @@ extern "C" {
 
 
 
-	status_t FLASH_SectorWrite(uint32_t sector, void* _buf )
+	mstatus_t FLASH_SectorWrite(uint32_t sector, void* _buf )
 	{
-		status_t result;
+		mstatus_t result;
 		result = FLASH_SectorErase(sector);
 		result = FLASH_AddressProgram(sector * flash_sectorSize, _buf, flash_sectorSize);
 		return result;
@@ -234,7 +234,7 @@ extern "C" {
 
 
 	/*
-	status_t FLASH_Ram2Flash(uint32_t dst, void* src, uint32_t size)
+	mstatus_t FLASH_Ram2Flash(uint32_t dst, void* src, uint32_t size)
 	{
 		assert(src);
 		if (kFTFx_SecurityStateNotSecure != flash_securityStatus)
@@ -255,7 +255,7 @@ extern "C" {
 		uint8_t* src_start = src;
 		uint32_t buff_start = 0;
 		uint32_t src_size = 0;
-		status_t result;
+		mstatus_t result;
 		for (uint32_t i = head; i < end + 1; i++)
 		{
 			src_start += src_size;
@@ -276,14 +276,14 @@ extern "C" {
 			ErrorCheck(result, FLASH_SectorWrite(buff, i));
 		}
 		free(buff);
-		return kStatus_FTFx_Success;
+		return mstatus_FTFx_Success;
 	}
 
 
 
 
 
-	status_t FLASH_Flash2Ram(void* dst, uint32_t src, uint32_t size)
+	mstatus_t FLASH_Flash2Ram(void* dst, uint32_t src, uint32_t size)
 	{
 		assert(dst);
 		if (kFTFx_SecurityStateNotSecure != flash_securityStatus)
@@ -304,7 +304,7 @@ extern "C" {
 		uint8_t* dst_start = dst;
 		uint32_t buff_start = 0;
 		uint32_t dst_size = 0;
-		status_t result;
+		mstatus_t result;
 		for (uint32_t i = head; i < end + 1; i++)
 		{
 			dst_start += dst_size;
@@ -324,7 +324,7 @@ extern "C" {
 			memcpy(dst_start, buff + buff_start, dst_size);
 		}
 		free(buff);
-		return kStatus_FTFx_Success;
+		return mstatus_FTFx_Success;
 	}
 	*/
 
@@ -336,4 +336,4 @@ extern "C" {
 }
 #endif
 
-#endif // ! HITSIC_USE_FTFX_FLASH
+#endif // ! CMODULE_USE_FTFX_FLASH

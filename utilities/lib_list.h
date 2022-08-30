@@ -37,7 +37,7 @@
 #ifndef UTILITIES_LIB_LIST_H
 #define UTILITIES_LIB_LIST_H
 #include <inc_stdlib.h>
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
 /*!
  * @addtogroup clist
@@ -45,7 +45,7 @@
  */
 
 /** @brief : 软件版本 */
-#define LIB_LIST_VERSION (HITSIC_MAKE_VERSION(0U, 1U, 1U))
+#define LIB_LIST_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 1U))
 
 #ifdef __cplusplus
 extern "C" {

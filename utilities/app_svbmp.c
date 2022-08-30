@@ -1,6 +1,6 @@
 #include <app_svbmp.h>
 
-#if (defined(HITSIC_USE_APP_SVBMP) && (HITSIC_USE_APP_SVBMP > 0))
+#if (defined(CMODULE_USE_APP_SVBMP) && (CMODULE_USE_APP_SVBMP > 0))
 
 /*!
  * @addtogroup svbmp
@@ -186,4 +186,4 @@ int SVBMP_Save(svbmp_file_t* fp, svbmp_img_t* img)
 
 /* @} */
 
-#endif // ! HITSIC_USE_APP_SVBMP
+#endif // ! CMODULE_USE_APP_SVBMP

@@ -19,7 +19,7 @@
 
 
 #include <inc_stdlib.h>
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
 #ifdef __cplusplus
 extern "C"{

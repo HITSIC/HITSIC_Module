@@ -1,9 +1,9 @@
 #ifndef D_MK24F12_SYS_EXTINT_PORT_H
 #define D_MK24F12_SYS_EXTINT_PORT_H
 
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
-#if defined(HITSIC_USE_EXTINT) && (HITSIC_USE_EXTINT > 0)
+#if defined(CMODULE_USE_EXTINT) && (CMODULE_USE_EXTINT > 0)
 
 typedef PORT_Type INTC_Type;
 typedef port_interrupt_t extInt_interruptMode_t;
@@ -39,6 +39,6 @@ inline INTC_Type *EXTINT_GetPortInst(GPIO_Type *gpio)
 }
 #endif
 
-#endif // ! HITSIC_USE_EXTINT
+#endif // ! CMODULE_USE_EXTINT
 
 #endif // ! D_MK24F12_SYS_EXTINT_PORT_H

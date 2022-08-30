@@ -102,18 +102,18 @@ void MENU_PORT_DisplayOutput(menu_strBuf_t *_buf)
  * 
  * @param _key 想要读取的键。
  * @param _size 保存大小的指针。
- * @return status_t 成功返回kStatus_Success，失败返回kStatus_Fail。
+ * @return mstatus_t 成功返回mstatus_Success，失败返回mstatus_Fail。
  */
-status_t MENU_PORT_KVDB_GetSize(char const *_key, uint32_t *_size)
+mstatus_t MENU_PORT_KVDB_GetSize(char const *_key, uint32_t *_size)
 {
     ef_get_env_blob(_key, NULL, 0, _size);
     if(0U == *_size)
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     else
     {
-        return kStatus_Success;
+        return mstatus_Success;
     }
 }
 
@@ -123,22 +123,22 @@ status_t MENU_PORT_KVDB_GetSize(char const *_key, uint32_t *_size)
  * @param _key 想要读取的键。
  * @param _data 存放读取数据的指针。
  * @param _size 提供的缓存区的大小。
- * @return status_t 成功返回kStatus_Success，失败（键不存在或缓存区太小）返回kStatus_Fail。
+ * @return mstatus_t 成功返回mstatus_Success，失败（键不存在或缓存区太小）返回mstatus_Fail。
  */
-status_t MENU_PORT_KVDB_ReadValue(char const *_key, void *_data , uint32_t _size)
+mstatus_t MENU_PORT_KVDB_ReadValue(char const *_key, void *_data , uint32_t _size)
 {
     uint32_t dataLen = ef_get_env_blob(_key, _data, _size, NULL);
     if(0U == dataLen)
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     else if (dataLen > _size)
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     else
     {
-        return kStatus_Success;
+        return mstatus_Success;
     }
 }
 
@@ -148,17 +148,17 @@ status_t MENU_PORT_KVDB_ReadValue(char const *_key, void *_data , uint32_t _size
  * @param _key 想要保存的键。
  * @param _data 存放保存数据的指针。
  * @param _size 保存数据的大小。
- * @return status_t 成功返回kStatus_Success，失败返回kStatus_Fail。
+ * @return mstatus_t 成功返回mstatus_Success，失败返回mstatus_Fail。
  */
-status_t MENU_PORT_KVDB_SaveValue(char const *_key, void const *_data, uint32_t _size)
+mstatus_t MENU_PORT_KVDB_SaveValue(char const *_key, void const *_data, uint32_t _size)
 {
     if(0U != ef_set_env_blob(_key, _data, _size))
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     else
     {
-        return kStatus_Success;
+        return mstatus_Success;
     }
 }
 
@@ -166,17 +166,17 @@ status_t MENU_PORT_KVDB_SaveValue(char const *_key, void const *_data, uint32_t 
  * @brief 删除键和对应值。
  * 
  * @param _key 想要删除的键。
- * @return status_t 成功返回kStatus_Success，失败返回kStatus_Fail。
+ * @return mstatus_t 成功返回mstatus_Success，失败返回mstatus_Fail。
  */
-status_t MENU_PORT_KVDB_DeltValue(char const *_key)
+mstatus_t MENU_PORT_KVDB_DeltValue(char const *_key)
 {
     if(0U !=  ef_del_env(_key))
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     else
     {
-        return kStatus_Success;
+        return mstatus_Success;
     }
 }
 
@@ -259,18 +259,18 @@ const char menu_itemNameStr_RegnSel[] = {'R','e','g','n','S','e','l','(','0','-'
  * ********** NVM存储操作接口 **********
  */
 
-status_t MENU_NvmRead(uint32_t _addr, void *_buf, uint32_t _byteCnt)
+mstatus_t MENU_NvmRead(uint32_t _addr, void *_buf, uint32_t _byteCnt)
 {
     SYSLOG_D("Read addr = 0x%8.8x, Size = %4.4ld", _addr, _byteCnt);
     uint32_t result = TEXTMENU_NVM_AddressRead(_addr, _buf, _byteCnt);
     if (TEXTMENU_NVM_RETVAL_SUCCESS == result)
     {
-        return kStatus_Success;
+        return mstatus_Success;
     }
     else
     {
         SYSLOG_E("Read failed. Addr = 0x%8.8x, size = %4.4ld, err = %ld", _addr, _byteCnt, result);
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
 }
 
@@ -287,18 +287,18 @@ bool MENU_NvmCacheable(uint32_t _addr)
     }
 }
 
-status_t MENU_NvmCacheSector(uint32_t _sect)
+mstatus_t MENU_NvmCacheSector(uint32_t _sect)
 {
     if (menu_nvm_cache != NULL)
     {
         SYSLOG_E("Cached failed. Sector %2.2ld [-Existing]", _sect);
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     menu_nvm_cache = (uint8_t *)malloc(flash_sectorSize);
     if (menu_nvm_cache == NULL)
     {
         SYSLOG_E("Cached failed. Sector %2.2ld [-MemMalloc]", _sect);
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     if (TEXTMENU_NVM_RETVAL_SUCCESS !=
             TEXTMENU_NVM_SectorRead(menu_nvm_cachedSector,
@@ -307,14 +307,14 @@ status_t MENU_NvmCacheSector(uint32_t _sect)
         free(menu_nvm_cache);
         menu_nvm_cache = NULL;
         SYSLOG_E("Cached failed. Sector %2.2ld [-FlashRead]", _sect);
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     menu_nvm_cachedSector = _sect;
     SYSLOG_V("Cached sector %2.2ld", menu_nvm_cachedSector);
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
-status_t MENU_NvmWriteCache(uint32_t _addr, void *_buf, uint32_t _byteCnt)
+mstatus_t MENU_NvmWriteCache(uint32_t _addr, void *_buf, uint32_t _byteCnt)
 {
     if (menu_nvm_cache == NULL)
     {
@@ -322,31 +322,31 @@ status_t MENU_NvmWriteCache(uint32_t _addr, void *_buf, uint32_t _byteCnt)
                 MENU_NvmCacheSector(_addr / TEXTMENU_NVM_SECTOR_SIZE))
         {
             SYSLOG_E("Write failed. Addr = 0x%8.8x, size = %4.4ld", _addr, _byteCnt);
-            return kStatus_Fail;
+            return mstatus_Fail;
         }
     }
     memcpy(menu_nvm_cache + _addr % flash_sectorSize, _buf, _byteCnt);
     SYSLOG_D("Write addr = 0x%8.8x, size = %4.4ld", _addr, _byteCnt);
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
-status_t MENU_NvmUpdateCache(void)
+mstatus_t MENU_NvmUpdateCache(void)
 {
     if (menu_nvm_cache == NULL)
     {
         SYSLOG_W("Update cache failed ! [-CacheEmpty]");
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     if (TEXTMENU_NVM_RETVAL_SUCCESS !=
             TEXTMENU_NVM_SectorWrite(menu_nvm_cachedSector, menu_nvm_cache))
     {
         SYSLOG_E("Update cache failed ! [-FlashWrite]");
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     free(menu_nvm_cache);
     menu_nvm_cache = NULL;
     SYSLOG_D("Update cached sector %2.2ld", menu_nvm_cachedSector);
-    return kStatus_Success;
+    return mstatus_Success;
 }
 
 void MENU_Data_NvmSave(int32_t _region)
@@ -372,7 +372,7 @@ void MENU_Data_NvmSave(int32_t _region)
             }
             MENU_NvmWriteCache(realAddr, (void *)&dataBuf, sizeof(menu_nvmData_t));
         }
-    }while(kStatus_Success == MENU_IteratorIncrease(iter));
+    }while(mstatus_Success == MENU_IteratorIncrease(iter));
     SYSLOG_I("Global Data End");
 
     if (menu_currRegionNumAdj[0] < 0 || menu_currRegionNumAdj[0] >= TEXTMENU_NVM_REGION_CNT)
@@ -399,7 +399,7 @@ void MENU_Data_NvmSave(int32_t _region)
             }
             MENU_NvmWriteCache(realAddr, (void *)&dataBuf, sizeof(menu_nvmData_t));
         }
-    }while(kStatus_Success == MENU_IteratorIncrease(iter));
+    }while(mstatus_Success == MENU_IteratorIncrease(iter));
 
     MENU_NvmUpdateCache();
     SYSLOG_I("Region %d Data End.", menu_currRegionNumAdj[0]);
@@ -433,7 +433,7 @@ void MENU_Data_NvmRead(int32_t _region)
             SYSLOG_D("Get Flash. menu: %-16.16s addr: %-4.4d data: 0x%-8.8x .", dataBuf.nameStr, thisItem->saveAddr, dataBuf.data);
             MENU_ItemSetData(thisItem, &dataBuf);
         }
-    }while(kStatus_Success == MENU_IteratorIncrease(iter));
+    }while(mstatus_Success == MENU_IteratorIncrease(iter));
 
     SYSLOG_I("Global Data End.");
     if (menu_currRegionNumAdj[0] < 0 || menu_currRegionNumAdj[0] >= TEXTMENU_NVM_REGION_CNT)
@@ -456,7 +456,7 @@ void MENU_Data_NvmRead(int32_t _region)
             SYSLOG_D("Get Flash. menu: %-16.16s addr: %-4.4d data: 0x%-8.8x .", dataBuf.nameStr, thisItem->saveAddr, dataBuf.data);
             MENU_ItemSetData(thisItem, &dataBuf);
         }
-    }while(kStatus_Success == MENU_IteratorIncrease(iter));
+    }while(mstatus_Success == MENU_IteratorIncrease(iter));
 
     SYSLOG_I("Region %d Data End", menu_currRegionNumAdj[0]);
     MENU_IteratorDestruct(iter);

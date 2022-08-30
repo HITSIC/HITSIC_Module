@@ -311,10 +311,10 @@ int main(int argc, const char **argv){
 的形式
 
 ```C
-#define HITSIC_INV_IMU_DEBUG 0 //此宏切换debug总开关
+#define CMODULE_INV_IMU_DEBUG 0 //此宏切换debug总开关
 #define INV_PRINTF printf //定义printf函数
-#define HITSIC_INV_YES_TRACE 0 //打开代码追踪输出
-#define HITSIC_INV_NO_DEBUG 1  //关闭代码调试输出
+#define CMODULE_INV_YES_TRACE 0 //打开代码追踪输出
+#define CMODULE_INV_NO_DEBUG 1  //关闭代码调试输出
 ```
 
 举例：（注意，具体宏以代码为准，实际定义可能有些许出入）
@@ -322,9 +322,9 @@ int main(int argc, const char **argv){
 使能驱动出错时输出消息
 
 ```c++
-#define HITSIC_INV_IMU_DEBUG 1
-#define HITSIC_INV_YES_TRACE 0
-#define HITSIC_INV_NO_DEBUG 0
+#define CMODULE_INV_IMU_DEBUG 1
+#define CMODULE_INV_YES_TRACE 0
+#define CMODULE_INV_NO_DEBUG 0
 #include <cstdio>
 #define INV_PRINTF printf
 ```
@@ -332,9 +332,9 @@ int main(int argc, const char **argv){
 使能驱动出错时输出消息+输出其他调试消息
 
 ```c++
-#define HITSIC_INV_IMU_DEBUG 1
-#define HITSIC_INV_YES_TRACE 1
-#define HITSIC_INV_NO_DEBUG 0
+#define CMODULE_INV_IMU_DEBUG 1
+#define CMODULE_INV_YES_TRACE 1
+#define CMODULE_INV_NO_DEBUG 0
 #include <cstdio>
 #define INV_PRINTF printf
 ```

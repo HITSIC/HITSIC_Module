@@ -18,7 +18,7 @@
 #ifndef RTE_I2C_H
 #define RTE_I2C_H
 #include "inc_stdlib.h"
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
 
 
@@ -32,11 +32,11 @@ extern "C" {
  *
  * @param  {I2C_Type*} base         : I2C外设基地址比如 I2C0,I2C1
  * @param  {uint32_t} baudRate_Bps_ : 波特率，单位hz
- * @return {status_t}               : 错误代码
+ * @return {mstatus_t}               : 错误代码
  * @SampleUsage
  *      I2C_SimpleInit(I2C0,400*1000);
  */
-status_t I2C_SimpleInit(I2C_Type* base, uint32_t baudRate_Bps_);
+mstatus_t I2C_SimpleInit(I2C_Type* base, uint32_t baudRate_Bps_);
 
 /**
  *
@@ -45,12 +45,12 @@ status_t I2C_SimpleInit(I2C_Type* base, uint32_t baudRate_Bps_);
  * @param  {uint8_t} reg          : 从机的寄存器
  * @param  {uint8_t*} data        : 读取数据的存放地址
  * @param  {uint32_t} size        : 读取数据的大小
- * @return {status_t}             : 错误代码
+ * @return {mstatus_t}             : 错误代码
  * @SampleUsage
  * 			uint8_t buf[10];
  * 			I2C_SimpleReadBlocking(I2C0,0x68,0x6A,buf,1);
  */
-status_t I2C_SimpleReadBlocking(I2C_Type* base, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size);
+mstatus_t I2C_SimpleReadBlocking(I2C_Type* base, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size);
 
 /**
  *
@@ -59,12 +59,12 @@ status_t I2C_SimpleReadBlocking(I2C_Type* base, uint8_t SlaveAddress, uint8_t re
  * @param  {uint8_t} reg          : 从机的寄存器
  * @param  {uint8_t*} data        : 写入数据的存放地址
  * @param  {uint32_t} size        : 写入数据的大小
- * @return {status_t}             : 错误代码
+ * @return {mstatus_t}             : 错误代码
  * @SampleUsage
  * 			uint8_t buf[10];
  * 			I2C_SimpleWriteBlocking(I2C0,0x68,0x6A,buf,1);
  */
-status_t I2C_SimpleWriteBlocking(I2C_Type* base, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size);
+mstatus_t I2C_SimpleWriteBlocking(I2C_Type* base, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size);
 
 
 /*!

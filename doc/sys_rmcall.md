@@ -362,13 +362,13 @@ rmcall_handle_t RMIS_h_status =
 
 ### RMCALL配置
 
-启用`hitsic_common.h`中的宏定义`HITSIC_USE_RMCALL`，使能RMCALL模块。
+启用`cmodule_common.h`中的宏定义`CMODULE_USE_RMCALL`，使能RMCALL模块。
 
 编辑`sys_rmcall_port.h`：宏定义“RMCALL_SYS_LVL”控制调试串口输出的日志数量，共分“详细”、“调试”、“信息”、“警告”、“错误”、“断言”六级，严重程度依次递增。`#define RMCALL_SYS_LVL (3U)`将启用 “信息”及以上级别的日志输出，适合日常使用。
 
-定义通信使用的魔数：`#define HITSIC_RMCALL_HEADER_MAGIC (0x554768A0U)`。通信双方的魔数应保持一致，可按需设置。
+定义通信使用的魔数：`#define CMODULE_RMCALL_HEADER_MAGIC (0x554768A0U)`。通信双方的魔数应保持一致，可按需设置。
 
-定义状态组`#define kStatusGroup_RMCALL (201U)`，这将给予RMCALL模块全局唯一的错误状态编码。
+定义状态组`#define mStatusGroup_RMCALL (201U)`，这将给予RMCALL模块全局唯一的错误状态编码。
 
 
 
@@ -379,10 +379,10 @@ rmcall_handle_t RMIS_h_status =
 为RMCALL模块适配串口通信。首先编写四个RMCALL通信接口的函数声明，四个函数依次是：以中断方式发送数据、以中断方式接收数据、停止发送数据、停止接收数据。
 
 ```c
-status_t RMCALL_HOST_Tx(void *_data, uint32_t _dataSize); ///< 以异步方式从_data指针发送_dataSize字节数据
-status_t RMCALL_HOST_Rx(void *_data, uint32_t _dataSize); ///< 以异步方式向_data指针接收_dataSize字节数据
-status_t RMCALL_HOST_TxAbort(void); ///< 取消发送任务
-status_t RMCALL_HOST_RxAbort(void); ///< 取消接收任务
+mstatus_t RMCALL_HOST_Tx(void *_data, uint32_t _dataSize); ///< 以异步方式从_data指针发送_dataSize字节数据
+mstatus_t RMCALL_HOST_Rx(void *_data, uint32_t _dataSize); ///< 以异步方式向_data指针接收_dataSize字节数据
+mstatus_t RMCALL_HOST_TxAbort(void); ///< 取消发送任务
+mstatus_t RMCALL_HOST_RxAbort(void); ///< 取消接收任务
 ```
 
 然后创建调用接口和配置结构体：

@@ -19,7 +19,7 @@
 #define RTE_USRT_H
 #include "inc_stdlib.h"
 #include "inc_fsl_mk66f18.h"
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,11 +30,11 @@ extern "C" {
  * 
  * @param  {UART_Type*} base        : 串口基地址，可选的有UART0 UART1 UART2 等等
  * @param  {uint32_t} baudRate_Bps_ : 波特率，常用的为115200
- * @return {status_t}               : 返回错误代码，0为成功初始化
+ * @return {mstatus_t}               : 返回错误代码，0为成功初始化
  * @SampleUsage 
  *      UART_SimpleInit(UART0,115200);
  */
-status_t UART_SimpleInit(UART_Type* base, uint32_t baudRate_Bps_);
+mstatus_t UART_SimpleInit(UART_Type* base, uint32_t baudRate_Bps_);
 
 /**
  * @brief   串口printf，用法同printf
@@ -64,17 +64,17 @@ int UART_Printf(UART_Type* base, const char* Format, ...);
  * @param  {UART_Type*} base : 串口基地址，可选的有UART0 UART1 UART2 等等
  * @param  {uint8_t*} data   : 接收的数组的指针
  * @param  {size_t} length   : 接收的数据的长度
- * @return {status_t}        : 错误代码
- * @retval kStatus_UART_RxHardwareOverrun Receiver overrun occurred while receiving data.
- * @retval kStatus_UART_NoiseError A noise error occurred while receiving data.
- * @retval kStatus_UART_FramingError A framing error occurred while receiving data.
- * @retval kStatus_UART_ParityError A parity error occurred while receiving data.
- * @retval kStatus_Success Successfully received all data. 
+ * @return {mstatus_t}        : 错误代码
+ * @retval mstatus_UART_RxHardwareOverrun Receiver overrun occurred while receiving data.
+ * @retval mstatus_UART_NoiseError A noise error occurred while receiving data.
+ * @retval mstatus_UART_FramingError A framing error occurred while receiving data.
+ * @retval mstatus_UART_ParityError A parity error occurred while receiving data.
+ * @retval mstatus_Success Successfully received all data. 
  * @SampleUsage
  *		char ch;
  *		UART_ReadBlocking(UART0, &ch, 1);
  */
-extern status_t UART_ReadBlocking(UART_Type* base, uint8_t* data, size_t length);
+extern mstatus_t UART_ReadBlocking(UART_Type* base, uint8_t* data, size_t length);
 
 /**
  * @brief Writes to the TX register using a blocking method.

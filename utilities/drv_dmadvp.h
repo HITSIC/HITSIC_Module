@@ -28,15 +28,15 @@
  */
 #ifndef UTILITIES_DRV_DMADVP_HPP_
 #define UTILITIES_DRV_DMADVP_HPP_
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
-#if defined(HITSIC_USE_DMADVP) && (HITSIC_USE_DMADVP > 0)
+#if defined(CMODULE_USE_DMADVP) && (CMODULE_USE_DMADVP > 0)
 #include <drv_dmadvp_port.h>
 #include <sys_extint.h>
 #include <m-deque.h>
 
 /** @brief : 软件版本 */
-#define DRV_DMADVP_VERSION (HITSIC_MAKE_VERSION(0U, 2U, 0U))
+#define DRV_DMADVP_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 2U, 0U))
 
 /*!
  * @addtogroup dmadvp
@@ -46,10 +46,10 @@
 /*! @brief Error codes for the DMADVP driver. */
 enum
 {
-    kStatus_DMADVP_NoEmptyBuffer = MAKE_STATUS(kStatusGroup_DMADVP, 0), /*!< No empty frame buffer in queue to load to CSI. */
-    kStatus_DMADVP_NoFullBuffer  = MAKE_STATUS(kStatusGroup_DMADVP, 1), /*!< No full frame buffer in queue to read out. */
-    kStatus_DMADVP_QueueFull = MAKE_STATUS(kStatusGroup_DMADVP, 2), /*!< Queue is full, no room to save new empty buffer. */
-    kStatus_DMADVP_FrameDone = MAKE_STATUS(kStatusGroup_DMADVP, 3), /*!< New frame received and saved to queue. */
+    mstatus_DMADVP_NoEmptyBuffer = CMODULE_MAKE_STATUS(mStatusGroup_DMADVP, 0), /*!< No empty frame buffer in queue to load to CSI. */
+    mstatus_DMADVP_NoFullBuffer  = CMODULE_MAKE_STATUS(mStatusGroup_DMADVP, 1), /*!< No full frame buffer in queue to read out. */
+    mstatus_DMADVP_QueueFull = CMODULE_MAKE_STATUS(mStatusGroup_DMADVP, 2), /*!< Queue is full, no room to save new empty buffer. */
+    mstatus_DMADVP_FrameDone = CMODULE_MAKE_STATUS(mStatusGroup_DMADVP, 3), /*!< New frame received and saved to queue. */
 };
 
 /*! @brief DMADVP signal polarity. */
@@ -96,9 +96,9 @@ struct dmadvp_handle_t
  * 
  * @param base DMADVP虚拟设备地址。
  * @param config DMADVP配置结构体。可由摄像头配置组件产生。
- * @retval kStatus_Success 初始化成功。
+ * @retval mstatus_Success 初始化成功。
  */
-status_t DMADVP_Init(DMADVP_Type *base, const dmadvp_config_t *config);
+mstatus_t DMADVP_Init(DMADVP_Type *base, const dmadvp_config_t *config);
 
 /**
  * @brief DMADVP虚拟设备取消初始化。
@@ -122,9 +122,9 @@ void DMADVP_TransferCreateHandle(dmadvp_handle_t *handle, DMADVP_Type *base, edm
  * @param base DMADVP虚拟设备地址。
  * @param handle DMADVP传输句柄。
  * @param destAddr 要提交的缓存区指针。
- * @retval kStatus_Success 提交成功。
+ * @retval mstatus_Success 提交成功。
  */
-status_t DMADVP_TransferSubmitEmptyBuffer(DMADVP_Type *base, dmadvp_handle_t *handle, uint8_t *buffer);
+mstatus_t DMADVP_TransferSubmitEmptyBuffer(DMADVP_Type *base, dmadvp_handle_t *handle, uint8_t *buffer);
 
 /**
  * @brief 获取传输完成的缓存区。
@@ -132,10 +132,10 @@ status_t DMADVP_TransferSubmitEmptyBuffer(DMADVP_Type *base, dmadvp_handle_t *ha
  * @param base DMADVP虚拟设备地址。
  * @param handle DMADVP传输句柄。
  * @param buffer 用于接收缓存区的指针。
- * @retval kStatus_Success 成功获取到了传输完成的缓存区。
- * @retval kStatus_DMADVP_NoFullBuffer 没有可供获取的传输完成的缓存区。
+ * @retval mstatus_Success 成功获取到了传输完成的缓存区。
+ * @retval mstatus_DMADVP_NoFullBuffer 没有可供获取的传输完成的缓存区。
  */
-status_t DMADVP_TransferGetFullBuffer(DMADVP_Type *base, dmadvp_handle_t *handle, uint8_t **buffer);
+mstatus_t DMADVP_TransferGetFullBuffer(DMADVP_Type *base, dmadvp_handle_t *handle, uint8_t **buffer);
 
 /**
  * @brief 启动当前传输。
@@ -146,11 +146,11 @@ status_t DMADVP_TransferGetFullBuffer(DMADVP_Type *base, dmadvp_handle_t *handle
  *
  * @param base DMADVP虚拟设备地址。
  * @param handle DMADVP传输句柄。
- * @retval kStatus_Success 成功启动传输。
- * @retval kStatus_EDMA_Busy 启动失败，传输进行中。
- * @retval kStatus_DMADVP_NoEmptyBuffer 启动失败，没有空缓存可供使用。
+ * @retval mstatus_Success 成功启动传输。
+ * @retval mstatus_EDMA_Busy 启动失败，传输进行中。
+ * @retval mstatus_DMADVP_NoEmptyBuffer 启动失败，没有空缓存可供使用。
  */
-status_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle);
+mstatus_t DMADVP_TransferStart(DMADVP_Type *base, dmadvp_handle_t *handle);
 
 /**
  * @brief 停止当前传输。
@@ -181,6 +181,6 @@ void DMADVP_EdmaCallbackService(dmadvp_handle_t *handle, bool transferDone);
 
 /* @} */
 
-#endif // ! HITSIC_USE_DMADVP
+#endif // ! CMODULE_USE_DMADVP
 
 #endif // ! UTILITIES_DRV_DMADVP_HPP_

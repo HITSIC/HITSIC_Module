@@ -158,8 +158,8 @@ by CkovMk @hitsic 2018.08.12
 ### 屏幕方向
 
 ```c++
-#define HITSIC_DISP_SSD1306_FLIP_X (0U)	///< 屏幕左右翻转
-#define HITSIC_DISP_SSD1306_FLIP_Y (0U)	///< 屏幕上下翻转
+#define CMODULE_DISP_SSD1306_FLIP_X (0U)	///< 屏幕左右翻转
+#define CMODULE_DISP_SSD1306_FLIP_Y (0U)	///< 屏幕上下翻转
 ```
 
 
@@ -208,11 +208,11 @@ inline void DISP_SSD1306_spiWrite(uint8_t data);
  * @ {
  */
 /// 启用DMA传输API
-#ifndef HITSIC_DISP_SSD1306_DMA
-#define HITSIC_DISP_SSD1306_DMA (0U)
-#endif // ! HITSIC_DISP_SSD1306_DMA
+#ifndef CMODULE_DISP_SSD1306_DMA
+#define CMODULE_DISP_SSD1306_DMA (0U)
+#endif // ! CMODULE_DISP_SSD1306_DMA
 
-#if defined(HITSIC_DISP_SSD1306_DMA) && (HITSIC_DISP_SSD1306_DMA > 0U)
+#if defined(CMODULE_DISP_SSD1306_DMA) && (CMODULE_DISP_SSD1306_DMA > 0U)
 /**
  * @brief 初始化SPI DMA传输
  */
@@ -227,7 +227,7 @@ void DISP_SSD1306_spiDmaInit(void);
  */
 void DISP_SSD1306_spiDmaWrite(uint8_t* data, uint32_t size);
 
-#endif // ! HITSIC_DISP_SSD1306_DMA
+#endif // ! CMODULE_DISP_SSD1306_DMA
 
 /* @ } */
 ```

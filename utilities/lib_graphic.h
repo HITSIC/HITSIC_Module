@@ -18,7 +18,7 @@
 #define UTILITIES_LIB_GRAPHIC_H
 
 #include <inc_stdlib.h>
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 #include <lib_graphic_font.h>
 /*!
  * @addtogroup graphic
@@ -26,7 +26,7 @@
  */
 
 /** @brief : 软件版本 */
-#define LIB_GRAPHIC_VERSION (HITSIC_MAKE_VERSION(0U, 1U, 0U))
+#define LIB_GRAPHIC_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
 
 
 #define GRAPHIC_FB_MONO_DEF(var_name, fun_name, row, col)                               \

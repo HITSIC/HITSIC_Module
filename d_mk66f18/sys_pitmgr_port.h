@@ -1,12 +1,12 @@
 #ifndef D_MK66F18_SYS_PITMGR_PORT_H
 #define D_MK66F18_SYS_PITMGR_PORT_H
 
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
-#if defined(HITSIC_USE_PITMGR) && (HITSIC_USE_PITMGR > 0)
+#if defined(CMODULE_USE_PITMGR) && (CMODULE_USE_PITMGR > 0)
 
-#define HITSIC_PITMGR_DEFAULT_IRQ 	(1U)
+#define CMODULE_PITMGR_DEFAULT_IRQ 	(1U)
 
-#endif // ! HITSIC_USE_PITMGR
+#endif // ! CMODULE_USE_PITMGR
 
 #endif // ! D_MK66F18_SYS_PITMGR_PORT_H

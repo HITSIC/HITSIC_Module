@@ -102,18 +102,18 @@ void MENU_PORT_DisplayOutput(menu_strBuf_t *_buf)
  * 
  * @param _key 想要读取的键。
  * @param _size 保存大小的指针。
- * @return status_t 成功返回kStatus_Success，失败返回kStatus_Fail。
+ * @return mstatus_t 成功返回mstatus_Success，失败返回mstatus_Fail。
  */
-status_t MENU_PORT_KVDB_GetSize(char const *_key, uint32_t *_size)
+mstatus_t MENU_PORT_KVDB_GetSize(char const *_key, uint32_t *_size)
 {
     ef_get_env_blob(_key, NULL, 0, _size);
     if(0U == *_size)
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     else
     {
-        return kStatus_Success;
+        return mstatus_Success;
     }
 }
 
@@ -123,22 +123,22 @@ status_t MENU_PORT_KVDB_GetSize(char const *_key, uint32_t *_size)
  * @param _key 想要读取的键。
  * @param _data 存放读取数据的指针。
  * @param _size 提供的缓存区的大小。
- * @return status_t 成功返回kStatus_Success，失败（键不存在或缓存区太小）返回kStatus_Fail。
+ * @return mstatus_t 成功返回mstatus_Success，失败（键不存在或缓存区太小）返回mstatus_Fail。
  */
-status_t MENU_PORT_KVDB_ReadValue(char const *_key, void *_data , uint32_t _size)
+mstatus_t MENU_PORT_KVDB_ReadValue(char const *_key, void *_data , uint32_t _size)
 {
     uint32_t dataLen = ef_get_env_blob(_key, _data, _size, NULL);
     if(0U == dataLen)
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     else if (dataLen > _size)
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     else
     {
-        return kStatus_Success;
+        return mstatus_Success;
     }
 }
 
@@ -148,17 +148,17 @@ status_t MENU_PORT_KVDB_ReadValue(char const *_key, void *_data , uint32_t _size
  * @param _key 想要保存的键。
  * @param _data 存放保存数据的指针。
  * @param _size 保存数据的大小。
- * @return status_t 成功返回kStatus_Success，失败返回kStatus_Fail。
+ * @return mstatus_t 成功返回mstatus_Success，失败返回mstatus_Fail。
  */
-status_t MENU_PORT_KVDB_SaveValue(char const *_key, void const *_data, uint32_t _size)
+mstatus_t MENU_PORT_KVDB_SaveValue(char const *_key, void const *_data, uint32_t _size)
 {
     if(0U != ef_set_env_blob(_key, _data, _size))
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     else
     {
-        return kStatus_Success;
+        return mstatus_Success;
     }
 }
 
@@ -166,17 +166,17 @@ status_t MENU_PORT_KVDB_SaveValue(char const *_key, void const *_data, uint32_t 
  * @brief 删除键和对应值。
  * 
  * @param _key 想要删除的键。
- * @return status_t 成功返回kStatus_Success，失败返回kStatus_Fail。
+ * @return mstatus_t 成功返回mstatus_Success，失败返回mstatus_Fail。
  */
-status_t MENU_PORT_KVDB_DeltValue(char const *_key)
+mstatus_t MENU_PORT_KVDB_DeltValue(char const *_key)
 {
     if(0U !=  ef_del_env(_key))
     {
-        return kStatus_Fail;
+        return mstatus_Fail;
     }
     else
     {
-        return kStatus_Success;
+        return mstatus_Success;
     }
 }
 

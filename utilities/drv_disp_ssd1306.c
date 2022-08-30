@@ -7,7 +7,7 @@
  */
 #include <drv_disp_ssd1306.h>
 
-#if defined(HITSIC_USE_DISP_SSD1306) && (HITSIC_USE_DISP_SSD1306 > 0)
+#if defined(CMODULE_USE_DISP_SSD1306) && (CMODULE_USE_DISP_SSD1306 > 0)
 
 #define SYSLOG_TAG  ("DISP_1306")
 #define SYSLOG_LVL  (3U)
@@ -58,8 +58,8 @@ void DISP_SSD1306_Fill(uint8_t bmp_data)
 
 void DISP_SSD1306_Init(void)
 {
-    SYSLOG_I("Init Begin. v%d.%d.%d",HITSIC_VERSION_MAJOR(DRV_DISP_SSD1306_VERSION),
-                HITSIC_VERSION_MINOR(DRV_DISP_SSD1306_VERSION), HITSIC_VERSION_PATCH(DRV_DISP_SSD1306_VERSION));
+    SYSLOG_I("Init Begin. v%d.%d.%d",CMODULE_VERSION_MAJOR(DRV_DISP_SSD1306_VERSION),
+                CMODULE_VERSION_MINOR(DRV_DISP_SSD1306_VERSION), CMODULE_VERSION_PATCH(DRV_DISP_SSD1306_VERSION));
 	DISP_SPIBUS_gpioSetRST(1);
 	DISP_SPIBUS_delay_ms(1);
 	DISP_SPIBUS_gpioSetRST(0);
@@ -72,20 +72,20 @@ void DISP_SSD1306_Init(void)
 	DISP_SSD1306_WriteCmd(0x40); //--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
 	DISP_SSD1306_WriteCmd(0x81); //--set contrast control register
 	DISP_SSD1306_WriteCmd(0xcf); // Set SEG Output Current OLED_SSD1306_Brightness
-#if defined(HITSIC_DISP_SSD1306_FLIP_X) && (HITSIC_DISP_SSD1306_FLIP_X > 0)
+#if defined(CMODULE_DISP_SSD1306_FLIP_X) && (CMODULE_DISP_SSD1306_FLIP_X > 0)
 	DISP_SSD1306_WriteCmd(0xa0); //--Set SEG/Column Mapping     0xa0左右反置 0xa1正常
 	SYSLOG_D("X axis flipped.");
-#else // ! HITSIC_DISP_SSD1306_FLIP_X
+#else // ! CMODULE_DISP_SSD1306_FLIP_X
 	DISP_SSD1306_WriteCmd(0xa1); //--Set SEG/Column Mapping     0xa0左右反置 0xa1正常
 	SYSLOG_D("X axis normal.");
-#endif// ! HITSIC_DISP_SSD1306_FLIP_X
-#if defined(HITSIC_DISP_SSD1306_FLIP_Y) && (HITSIC_DISP_SSD1306_FLIP_Y > 0)
+#endif// ! CMODULE_DISP_SSD1306_FLIP_X
+#if defined(CMODULE_DISP_SSD1306_FLIP_Y) && (CMODULE_DISP_SSD1306_FLIP_Y > 0)
 	DISP_SSD1306_WriteCmd(0xc0); //Set COM/Row Scan Direction   0xc0上下反置 0xc8正常
 	SYSLOG_D("Y axis flipped.");
-#else // ! HITSIC_DISP_SSD1306_FLIP_Y
+#else // ! CMODULE_DISP_SSD1306_FLIP_Y
 	DISP_SSD1306_WriteCmd(0xc8); //Set COM/Row Scan Direction   0xc0上下反置 0xc8正常
 	SYSLOG_D("Y axis normal.");
-#endif// ! HITSIC_DISP_SSD1306_FLIP_Y
+#endif// ! CMODULE_DISP_SSD1306_FLIP_Y
 	DISP_SSD1306_WriteCmd(0xa6); //--set normal display
 	DISP_SSD1306_WriteCmd(0xa8); //--set multiplex ratio(1 to 64)
 	DISP_SSD1306_WriteCmd(0x3f); //--1/64 duty
@@ -110,12 +110,12 @@ void DISP_SSD1306_Init(void)
 	DISP_SSD1306_Fill(0x00);  //初始清屏
 	DISP_SSD1306_SetPos(0, 0);
 
-#if defined(HITSIC_DISP_SSD1306_DMA) && (HITSIC_DISP_SSD1306_DMA > 0U)
+#if defined(CMODULE_DISP_SSD1306_DMA) && (CMODULE_DISP_SSD1306_DMA > 0U)
 	DISP_SPIBUS_spiDmaInit();
 	SYSLOG_D("DMA API enabled.");
 #else
 	SYSLOG_D("DMA API disbled.");
-#endif // ! HITSIC_DISP_SSD1306_DMA
+#endif // ! CMODULE_DISP_SSD1306_DMA
 
 	SYSLOG_I("Init Comlpete.");
 }
@@ -228,7 +228,7 @@ void DISP_SSD1306_BufferUpload(uint8_t *buffer)
 }
 
 
-#if defined(HITSIC_DISP_SSD1306_DMA) && (HITSIC_DISP_SSD1306_DMA > 0U)
+#if defined(CMODULE_DISP_SSD1306_DMA) && (CMODULE_DISP_SSD1306_DMA > 0U)
 
 void DISP_SSD1306_BufferUploadDMA(uint8_t *buffer)
 {
@@ -237,7 +237,7 @@ void DISP_SSD1306_BufferUploadDMA(uint8_t *buffer)
     DISP_SSD1306_spiDmaWrite(buffer, sizeof(disp_ssd1306_fb_t));
 }
 
-#endif // ! HITSIC_DISP_SSD1306_DMA
+#endif // ! CMODULE_DISP_SSD1306_DMA
 
-#endif // ! HITSIC_USE_DISP_SSD1306
+#endif // ! CMODULE_USE_DISP_SSD1306
 

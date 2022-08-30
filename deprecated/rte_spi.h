@@ -18,7 +18,7 @@
 #define RTE_SPI_H
 
 #include "inc_stdlib.h"
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,11 +31,11 @@ extern "C" {
  * @param  {SPI_Type*} base         : 外设基地址 SPI0 SPI1等等
  * @param  {uint32_t} whichpcs      : 片选 0 1 2 3 等等
  * @param  {uint32_t} baudRate_Bps_ : 波特率单位hz
- * @return {status_t}               : 错误代码
+ * @return {mstatus_t}               : 错误代码
  * @SampleUsage
  *      SPI_SimpleInit(SPI2,0,1*1000000);
  */
-status_t SPI_SimpleInit(SPI_Type* base, uint32_t whichpcs, uint32_t baudRate_Bps_);
+mstatus_t SPI_SimpleInit(SPI_Type* base, uint32_t whichpcs, uint32_t baudRate_Bps_);
 
 /**
  * @brief   spi全双工传输
@@ -45,7 +45,7 @@ status_t SPI_SimpleInit(SPI_Type* base, uint32_t whichpcs, uint32_t baudRate_Bps
  * @param  {uint8_t*} rxbuf    : 接收缓存地址 如果不需要接收为NULL
  * @param  {uint8_t*} txbuf    : 发送数据地址 如果不需要发送为NULL
  * @param  {uint32_t} len      : 长度
- * @return {status_t}          : 错误代码
+ * @return {mstatus_t}          : 错误代码
  * @SampleUsage
  *      char txbufff[100];
  *      char rxbufff[100];
@@ -53,7 +53,7 @@ status_t SPI_SimpleInit(SPI_Type* base, uint32_t whichpcs, uint32_t baudRate_Bps
  *      SPI_FullDuplexXfer(SPI2,0,rxbufff,NULL,90);
  *      SPI_FullDuplexXfer(SPI2,0,NULL,txbufff,70);
  */
-status_t SPI_FullDuplexXfer(SPI_Type* base, uint32_t whichpcs, uint8_t* rxbuf, uint8_t* txbuf, uint32_t len);
+mstatus_t SPI_FullDuplexXfer(SPI_Type* base, uint32_t whichpcs, uint8_t* rxbuf, uint8_t* txbuf, uint32_t len);
 
 /*!
  * brief De-initializes the DSPI peripheral. Call this API to disable the DSPI clock.

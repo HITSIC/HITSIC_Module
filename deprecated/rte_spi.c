@@ -1,10 +1,10 @@
-#include <HITSIC_Module/deprecated/rte_spi.h>
+#include <CMODULE_Module/deprecated/rte_spi.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-status_t SPI_SimpleInit(SPI_Type* base, uint32_t whichpcs, uint32_t baudRate_Bps_)
+mstatus_t SPI_SimpleInit(SPI_Type* base, uint32_t whichpcs, uint32_t baudRate_Bps_)
 {
 	dspi_master_config_t masterConfig;
 	/* Master config */
@@ -29,7 +29,7 @@ status_t SPI_SimpleInit(SPI_Type* base, uint32_t whichpcs, uint32_t baudRate_Bps
 	return 0;
 }
 
-status_t SPI_FullDuplexXfer(SPI_Type* base, uint32_t whichpcs, uint8_t* rxbuf, uint8_t* txbuf, uint32_t len)
+mstatus_t SPI_FullDuplexXfer(SPI_Type* base, uint32_t whichpcs, uint8_t* rxbuf, uint8_t* txbuf, uint32_t len)
 {
 	dspi_transfer_t masterXfer;
 	masterXfer.txData = txbuf;

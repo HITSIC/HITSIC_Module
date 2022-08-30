@@ -29,7 +29,7 @@ static uint32_t SDA_val(SI2C_Type* base);
 static uint32_t SCL_val(SI2C_Type* base);
 
 
-status_t SI2C_Init(SI2C_Type* base)
+mstatus_t SI2C_Init(SI2C_Type* base)
 {
 	//����·�ɲ������ÿ�©����
 	PORT_SetPinMux(PORTxGet(base->SCL), base->SCL_pin, kPORT_MuxAsGpio);
@@ -59,7 +59,7 @@ status_t SI2C_Init(SI2C_Type* base)
 	return 0;
 }
 
-status_t SI2C_MasterReadBlocking(SI2C_Type* p, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size)
+mstatus_t SI2C_MasterReadBlocking(SI2C_Type* p, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size)
 {
 	IIC_Start(p);
 	IIC_Send_Byte(p, (SlaveAddress << 1) | 0);//����������ַ+д����	
@@ -84,7 +84,7 @@ status_t SI2C_MasterReadBlocking(SI2C_Type* p, uint8_t SlaveAddress, uint8_t reg
 	return 0;
 }
 
-status_t SI2C_MasterWriteBlocking(SI2C_Type* p, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size)
+mstatus_t SI2C_MasterWriteBlocking(SI2C_Type* p, uint8_t SlaveAddress, uint8_t reg, uint8_t* data, uint32_t size)
 {
 	uint8_t i;
 	IIC_Start(p);
