@@ -38,7 +38,7 @@
  */
 
 /** @brief : 软件版本 */
-#define LIB_PIDCTRL_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
+#define LIB_PIDCTRL_VERSION (CMODULE_MAKE_VERSION(0U, 1U, 0U))
 
 //#define assert(...)
 
@@ -52,6 +52,10 @@ typedef struct _pid2Ctrl
 {
     pidCtrl_t outer, inner;
 }pid2Ctrl_t;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief 设置PID结构体参数
@@ -191,6 +195,10 @@ float PID2CTRL_UpdateAndCalcPID(pid2Ctrl_t *_pid, float _err);
  * @return float 串级PID结果输出
  */
 float PID2CTRL_UpdateByDiffeAndCalcPID(pid2Ctrl_t *_pid, float _diff);
+
+#ifdef __cplusplus
+}
+#endif
 
 /* @} */
 

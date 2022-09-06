@@ -23,8 +23,8 @@
  * @note    :   依赖库：sys_extint.h、sys_pitmgr.h
                 依赖库必须先初始化。
  */
-#ifndef UTILITIES_DRV_CAM_ZF9V034_HPP
-#define UTILITIES_DRV_CAM_ZF9V034_HPP
+#ifndef UTILITIES_DRV_CAM_ZF9V034_H
+#define UTILITIES_DRV_CAM_ZF9V034_H
 
 #include "cmodule_common.h"
 
@@ -37,7 +37,7 @@
  */
 
 /** @brief : 软件版本 */
-#define DRV_CAM_ZF9V034_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
+#define DRV_CAM_ZF9V034_VERSION (CMODULE_MAKE_VERSION(0U, 1U, 0U))
 
 /** @brief : 摄像头命令枚举 */
 enum class cam_zf9v034_cmd_t : uint16_t
@@ -79,6 +79,10 @@ struct _cam_zf9v034_configPacket
 };
 
 typedef struct _cam_zf9v034_configPacket cam_zf9v034_configPacket_t;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief 获取摄像头的默认配置。
@@ -146,8 +150,12 @@ void CAM_ZF9V034_GetReceiverConfig(receiver_config_type *config, const cam_zf9v0
 
 #endif // ! Receiver Config
 
+#ifdef __cplusplus
+}
+#endif
+
 /* @} */
 
 #endif // ! CMODULE_USE_CAM_ZF9V034
 
-#endif // ! UTILITIES_DRV_CAM_ZF9V034_HPP
+#endif // ! UTILITIES_DRV_CAM_ZF9V034_H

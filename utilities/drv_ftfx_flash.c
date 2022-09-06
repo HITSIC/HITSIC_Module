@@ -121,7 +121,7 @@ extern "C" {
 		}
 		if ((_addr + _byteCnt - 1) / flash_sectorSize != _addr / flash_sectorSize)
 		{
-			return mstatus_FTFx_SizeError;
+			return kStatus_FTFx_SizeError;
 		}
 
 		/* Post-preparation work about flash Cache/Prefetch/Speculation. */
@@ -140,7 +140,7 @@ extern "C" {
 		{
 			((uint8_t*)_buf)[i] = *(volatile uint8_t*)(destAdrss + i);
 		}
-		return mstatus_FTFx_Success;
+		return kStatus_FTFx_Success;
 
 	}
 
@@ -161,7 +161,7 @@ extern "C" {
 		}
 		if ((_addr + _byteCnt - 1) / flash_sectorSize != _addr / flash_sectorSize)
 		{
-			return mstatus_FTFx_SizeError;
+			return kStatus_FTFx_SizeError;
 		}
 
 		/* Pre-preparation work about flash Cache/Prefetch/Speculation. */
@@ -276,7 +276,7 @@ extern "C" {
 			ErrorCheck(result, FLASH_SectorWrite(buff, i));
 		}
 		free(buff);
-		return mstatus_FTFx_Success;
+		return kStatus_FTFx_Success;
 	}
 
 
@@ -324,7 +324,7 @@ extern "C" {
 			memcpy(dst_start, buff + buff_start, dst_size);
 		}
 		free(buff);
-		return mstatus_FTFx_Success;
+		return kStatus_FTFx_Success;
 	}
 	*/
 

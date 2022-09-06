@@ -26,8 +26,8 @@
                 依赖库必须先初始化。
  */
 
-#ifndef UTILITIES_DRV_BUTTON_HPP
-#define UTILITIES_DRV_BUTTON_HPP
+#ifndef UTILITIES_DRV_BUTTON_H
+#define UTILITIES_DRV_BUTTON_H
 #include <inc_stdlib.h>
 #include "cmodule_common.h"
 
@@ -46,7 +46,7 @@ extern "C"{
 #endif
 
 /** @brief : 软件版本 */
-#define DRV_BUTTON_VERSION (CMODULE_CMODULE_MAKE_VERSION(0u, 3u, 0u))
+#define DRV_BUTTON_VERSION (CMODULE_MAKE_VERSION(0u, 3u, 0u))
 
 typedef enum 
 {
@@ -107,4 +107,4 @@ void BUTTON_PitIsr(button_t *_inst);
 
 #endif // ! CMODULE_USE_DRV_BUTTON
 
-#endif // ! UTILITIES_DRV_BUTTON_HPP
+#endif // ! UTILITIES_DRV_BUTTON_H

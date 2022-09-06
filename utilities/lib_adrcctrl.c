@@ -4,7 +4,6 @@
 extern "C"{
 #endif
 
-
 float ADRCCTRL_Sign(float val)
 {
 	if(val >= 0.0f)
@@ -141,7 +140,6 @@ void ADRCCTRL_UpdateFal(adrc_t *p, float d_line)
 		p->u = p->u_min;
 	}
 }
-
 
 #ifdef __cplusplus
 }

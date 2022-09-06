@@ -106,7 +106,7 @@ by CkovMk @hitsic 2020.02.15
 ### 宏定义介绍
 
 ```c++
-#define DRV_BUTTON_VERSION (CMODULE_CMODULE_MAKE_VERSION(0u, 1u, 1u))
+#define DRV_BUTTON_VERSION (CMODULE_MAKE_VERSION(0u, 1u, 1u))
 
 #define BUTTON_TIME_SHRT 50u    ///< 短按最短时间。要产生短按，按下事件必须小于短按的最长时间。
 #define BUTTON_SHRT_TOUT 200u	///< 短按最长时间。

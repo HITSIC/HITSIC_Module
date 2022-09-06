@@ -65,11 +65,11 @@ int UART_Printf(UART_Type* base, const char* Format, ...);
  * @param  {uint8_t*} data   : 接收的数组的指针
  * @param  {size_t} length   : 接收的数据的长度
  * @return {mstatus_t}        : 错误代码
- * @retval mstatus_UART_RxHardwareOverrun Receiver overrun occurred while receiving data.
- * @retval mstatus_UART_NoiseError A noise error occurred while receiving data.
- * @retval mstatus_UART_FramingError A framing error occurred while receiving data.
- * @retval mstatus_UART_ParityError A parity error occurred while receiving data.
- * @retval mstatus_Success Successfully received all data. 
+ * @retval mStatus_UART_RxHardwareOverrun Receiver overrun occurred while receiving data.
+ * @retval mStatus_UART_NoiseError A noise error occurred while receiving data.
+ * @retval mStatus_UART_FramingError A framing error occurred while receiving data.
+ * @retval mStatus_UART_ParityError A parity error occurred while receiving data.
+ * @retval mStatus_Success Successfully received all data. 
  * @SampleUsage
  *		char ch;
  *		UART_ReadBlocking(UART0, &ch, 1);

@@ -11,6 +11,10 @@
 #define SYSLOG_LVL RMCALL_SYSLOG_LVL
 #include <inc_syslog.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** Private Functions */
 
 void RMCALL_TxStatusMachine(rmcall_t *_inst)
@@ -161,6 +165,16 @@ void RMCALL_RxStatusMachine(rmcall_t *_inst)
 
 /** Public Functions */
 
+__WEAK mstatus_t RMCALL_PreInitHook(rmcall_t *_inst)
+{
+    // do nothing
+}
+
+__WEAK mstatus_t RMCALL_AftDeInitHook(rmcall_t *_inst)
+{
+    // do nothing
+}
+
 mstatus_t RMCALL_Init(rmcall_t *_inst, rmcall_config_t const * const _config)
 {
     assert(_config->teleport);
@@ -170,6 +184,8 @@ mstatus_t RMCALL_Init(rmcall_t *_inst, rmcall_config_t const * const _config)
     assert(_config->teleport->xferAbort_rx);
 
     SYSLOG_I("Init Begin. v%d.%d.%d",CMODULE_VERSION_MAJOR(SYS_RMCALL_VERSION),CMODULE_VERSION_MINOR(SYS_RMCALL_VERSION), CMODULE_VERSION_PATCH(SYS_RMCALL_VERSION));
+
+    RMCALL_PreInitHook(_inst);
 
     _inst->teleport = _config->teleport;
 
@@ -186,7 +202,7 @@ mstatus_t RMCALL_Init(rmcall_t *_inst, rmcall_config_t const * const _config)
 
     SYSLOG_I("Init Comlpete.");
     
-    return mstatus_Success;
+    return mStatus_Success;
 }
 
 void RMCALL_DeInit(rmcall_t *_inst)
@@ -199,6 +215,8 @@ void RMCALL_DeInit(rmcall_t *_inst)
     _inst->rxDataBuffer = NULL;
 
     rmcall_isrDict_clear(_inst->isrDict);
+
+    RMCALL_AftDeInitHook(_inst);
 }
 
 mstatus_t RMCALL_HandleInsert(rmcall_t *_inst, rmcall_handle_t *_handle)
@@ -209,14 +227,14 @@ mstatus_t RMCALL_HandleInsert(rmcall_t *_inst, rmcall_handle_t *_handle)
     if(_handle->handleId > 65533)
     {
         SYSLOG_W("Insert Fail. Handle ID Out of Range !");
-        return mstatus_Fail; // 65534 & 65535 is used for OOR detection.
+        return mStatus_Fail; // 65534 & 65535 is used for OOR detection.
     }
 
     HAL_EnterCritical();
     rmcall_isrDict_set_at(_inst->isrDict, _handle->handleId, _handle);
     HAL_ExitCritical();
 
-    return mstatus_Success;
+    return mStatus_Success;
 }
 
 mstatus_t RMCALL_HandleRemove(rmcall_t *_inst, rmcall_handle_t *_handle)
@@ -228,7 +246,7 @@ mstatus_t RMCALL_HandleRemove(rmcall_t *_inst, rmcall_handle_t *_handle)
     rmcall_isrDict_erase(_inst->isrDict, _handle->handleId);
     HAL_ExitCritical();
 
-    return mstatus_Success;
+    return mStatus_Success;
 }
 
 mstatus_t RMCALL_CommandSend(rmcall_t *_inst, uint16_t _handleId, void *_data, uint16_t _dataSize)
@@ -239,7 +257,7 @@ mstatus_t RMCALL_CommandSend(rmcall_t *_inst, uint16_t _handleId, void *_data, u
 
     if(0U != (_inst->statusFlag & rmcall_statusFlag_txBusy))
     {
-        return mstatus_RMCALL_TxBusy;
+        return mStatus_RMCALL_TxBusy;
     }
 
     _inst->txHeaderBuffer.magic = RMCALL_HEADER_MAGIC;
@@ -261,13 +279,13 @@ mstatus_t RMCALL_CommandSend(rmcall_t *_inst, uint16_t _handleId, void *_data, u
 mstatus_t RMCALL_CommandRecvEnable(rmcall_t *_inst)
 {
     assert(_inst);
-    mstatus_t ret = mstatus_Success;
+    mstatus_t ret = mStatus_Success;
 
     if(0U == (_inst->statusFlag & rmcall_statusFlag_rxBusy))
     {
         _inst->statusFlag |= rmcall_statusFlag_rxHead;
         ret = _inst->teleport->xfer_rx((void*)&_inst->rxHeaderBuffer, sizeof(rmcall_header_t));
-        if(mstatus_Success == ret)
+        if(mStatus_Success == ret)
         {
             SYSLOG_I("Rx enabled. Rx command begin.");
         }
@@ -290,11 +308,11 @@ mstatus_t RMCALL_CommandRecvDisable(rmcall_t *_inst)
         _inst->teleport->xferAbort_rx();
         _inst->statusFlag &= (~rmcall_statusFlag_rxBusy);
         SYSLOG_I("Rx disabled.");
-        return mstatus_Success;
+        return mStatus_Success;
     }
     
     SYSLOG_W("Rx disable failed. Rx busy.");
-    return mstatus_Fail;
+    return mStatus_Fail;
 }
 
 void RMCALL_TxIsr(rmcall_t *_inst)
@@ -354,6 +372,9 @@ void RMCALL_RxIsr(rmcall_t *_inst)
     }
 }
 
+#ifdef __cplusplus
+}
+#endif
 
 /* @} */
 

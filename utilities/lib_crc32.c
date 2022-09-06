@@ -97,6 +97,10 @@ static const uint32_t crc32_table[] =
   0xbcb4666d, 0xb8757bda, 0xb5365d03, 0xb1f740b4
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 uint32_t CRC32_Calculate(void const *data, int32_t len, uint32_t init)
 {
     uint32_t crc = init;
@@ -108,3 +112,7 @@ uint32_t CRC32_Calculate(void const *data, int32_t len, uint32_t init)
     }
     return crc;
 }
+
+#ifdef __cplusplus
+}
+#endif

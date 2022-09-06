@@ -22,8 +22,8 @@
  *
  * @brief   :   SSD1327 OLED屏幕驱动组件
  */
-#ifndef DRV_DISP_SSD1327_H
-#define DRV_DISP_SSD1327_H
+#ifndef UTILITIES_DRV_DISP_SSD1327_H
+#define UTILITIES_DRV_DISP_SSD1327_H
 
 #include <inc_stdlib.h>
 #include "cmodule_common.h"
@@ -33,7 +33,11 @@
 #include <lib_graphic.h>
 
 /** @brief : 软件版本 */
-#define DRV_DISP_SSD1327_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
+#define DRV_DISP_SSD1327_VERSION (CMODULE_MAKE_VERSION(0U, 1U, 0U))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 GRAPHIC_FB_GSCL4B_DEF(disp_ssd1327, DISP_SSD1327, 128, 128)
 
@@ -49,7 +53,11 @@ void DISP_SSD1327_SetPixel(uint8_t x, uint8_t y, disp_ssd1327_fb_pixel_t _color)
 
 void DISP_SSD1327_BufferUpload(disp_ssd1327_fb_t *_fb);
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif // ! CMODULE_USE_DISP_SSD1327
 
-#endif // ! DRV_DISP_SSD1327_H
+#endif // ! UTILITIES_DRV_DISP_SSD1327_H
 

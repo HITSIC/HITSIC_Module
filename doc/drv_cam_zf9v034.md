@@ -65,7 +65,7 @@ by CkovMk @hitsic 2020.10.20
  * 
  * @param data 数据指针
  * @param length 数据长度
- * @return mstatus_t 返回状态，成功时返回mstatus_Success。
+ * @return mstatus_t 返回状态，成功时返回mStatus_Success。
  */
 inline mstatus_t CAM_ZF9V034_UartRxBlocking(uint8_t *data, uint32_t length);
 
@@ -74,7 +74,7 @@ inline mstatus_t CAM_ZF9V034_UartRxBlocking(uint8_t *data, uint32_t length);
  * 
  * @param data 数据指针
  * @param length 数据长度
- * @return mstatus_t 返回状态，成功时返回mstatus_Success。
+ * @return mstatus_t 返回状态，成功时返回mStatus_Success。
  */
 inline mstatus_t CAM_ZF9V034_UartTxBlocking(const uint8_t *data, uint32_t length);
 

@@ -62,12 +62,12 @@ void RMCALL_HOST_RxAbort(void)
 void RMCALL_HOST_CpltCallback(UART_Type *base, uart_handle_t *handle, mstatus_t status, void *userData)
 {
 	(void)(userData);
-	if (mstatus_UART_TxIdle == status)
+	if (mStatus_UART_TxIdle == status)
     {
         RMCALL_TxIsr(&rmcall_host);
     }
 
-    if (mstatus_UART_RxIdle == status)
+    if (mStatus_UART_RxIdle == status)
     {
         RMCALL_RxIsr(&rmcall_host);
     }

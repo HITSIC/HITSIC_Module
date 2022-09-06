@@ -26,13 +26,13 @@ void RMCALL_Callback(LPUART_Type *base, lpuart_handle_t *handle, mstatus_t statu
 {
     userData = userData;
 
-    if (mstatus_LPUART_TxIdle == status)
+    if (mStatus_LPUART_TxIdle == status)
     {
         txBufferFull = false;
         txOnGoing    = false;
     }
 
-    if (mstatus_LPUART_RxIdle == status)
+    if (mStatus_LPUART_RxIdle == status)
     {
         rxBufferEmpty = false;
         rxOnGoing     = false;

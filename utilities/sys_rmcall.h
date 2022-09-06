@@ -26,8 +26,8 @@
  * 
  */
 
-#ifndef _SYS_RMCALL_HPP_
-#define _SYS_RMCALL_HPP_
+#ifndef SYS_RMCALL_H
+#define SYS_RMCALL_H
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -48,18 +48,18 @@
   */
 
 /** @brief : 软件版本 */
-#define SYS_RMCALL_VERSION (CMODULE_CMODULE_MAKE_VERSION(1U, 0U, 0U))
+#define SYS_RMCALL_VERSION (CMODULE_MAKE_VERSION(1U, 0U, 0U))
 
 
 /*! @brief Error codes for the RMCALL driver. */
 enum
 {
-    mstatus_RMCALL_TxBusy = CMODULE_MAKE_STATUS(mStatusGroup_RMCALL, 0),
-    mstatus_RMCALL_TxError  = CMODULE_MAKE_STATUS(mStatusGroup_RMCALL, 1),
-    mstatus_RMCALL_RxBusy = CMODULE_MAKE_STATUS(mStatusGroup_RMCALL, 2),
-    mstatus_RMCALL_RxError = CMODULE_MAKE_STATUS(mStatusGroup_RMCALL, 3),
+    mStatus_RMCALL_TxBusy = CMODULE_MAKE_STATUS(mStatusGroup_RMCALL, 0),
+    mStatus_RMCALL_TxError  = CMODULE_MAKE_STATUS(mStatusGroup_RMCALL, 1),
+    mStatus_RMCALL_RxBusy = CMODULE_MAKE_STATUS(mStatusGroup_RMCALL, 2),
+    mStatus_RMCALL_RxError = CMODULE_MAKE_STATUS(mStatusGroup_RMCALL, 3),
 #if defined(RMCALL_TRAILER_CRC32) && (RMCALL_TRAILER_CRC32 != 0U)
-    mstatus_RMCALL_ParityError = CMODULE_MAKE_STATUS(mStatusGroup_RMCALL, 3), /*!< CRC check failed. */
+    mStatus_RMCALL_ParityError = CMODULE_MAKE_STATUS(mStatusGroup_RMCALL, 3), /*!< CRC check failed. */
 #endif // RMCALL_TRAILER_CRC32
     
 };
@@ -139,7 +139,13 @@ static inline void oor_set(uint16_t *k, unsigned char n) {
   *k = 65535 - n;//FIXME
 }
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 DICT_OA_DEF2(rmcall_isrDict, uint16_t, M_OPEXTEND(M_DEFAULT_OPLIST, OOR_EQUAL(oor_equal_p), OOR_SET(oor_set M_IPTR)) , rmcall_handle_t*, M_PTR_OPLIST)
+#ifdef __cplusplus
+}
+#endif
 
 typedef struct _rmcall
 {
@@ -164,10 +170,14 @@ typedef struct _rmcall
 
 }rmcall_t;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief : RMCALL初始化。
  *
- * @return {mstatus_t} : 成功返回mstatus_Success，异常返回mstatus_Fail。
+ * @return {mstatus_t} : 成功返回mStatus_Success，异常返回mStatus_Fail。
  */
 mstatus_t RMCALL_Init(rmcall_t *_inst, rmcall_config_t const * const _config);
 
@@ -179,7 +189,7 @@ void RMCALL_DeInit(rmcall_t *_inst);
  *
  * @param {rmcall_t*} _inst          : 要操作的RMCALL实例。
  * @param {rmcall_handle_t*} _handle : 该RMCALL任务的任务描述符指针。
- * @return {mstatus_t}                : 成功返回mstatus_Success，异常返回mstatus_Fail。
+ * @return {mstatus_t}                : 成功返回mStatus_Success，异常返回mStatus_Fail。
  */
 mstatus_t RMCALL_HandleInsert(rmcall_t *_inst, rmcall_handle_t *_handle);
 
@@ -188,7 +198,7 @@ mstatus_t RMCALL_HandleInsert(rmcall_t *_inst, rmcall_handle_t *_handle);
  *
  * @param {rmcall_t*} _inst          : 要操作的RMCALL实例。
  * @param {rmcall_handle_t*} _handle : 该RMCALL任务的任务描述符指针。
- * @return {mstatus_t}                : 成功返回mstatus_Success，异常返回mstatus_Fail。
+ * @return {mstatus_t}                : 成功返回mStatus_Success，异常返回mStatus_Fail。
  */
 mstatus_t RMCALL_HandleRemove(rmcall_t *_inst, rmcall_handle_t *_handle);
 
@@ -207,7 +217,7 @@ mstatus_t RMCALL_CommandSend(rmcall_t *_inst, uint16_t _handleId, void *_data, u
  * @brief : RMCALL接收使能。
  *
  * @param {rmcall_t*} _inst         : 要操作的RMCALL实例。
- * @return {mstatus_t} : 成功返回mstatus_Success，异常返回mstatus_Fail。
+ * @return {mstatus_t} : 成功返回mStatus_Success，异常返回mStatus_Fail。
  */
 mstatus_t RMCALL_CommandRecvEnable(rmcall_t *_inst);
 
@@ -215,7 +225,7 @@ mstatus_t RMCALL_CommandRecvEnable(rmcall_t *_inst);
  * @brief : RMCALL接收失能。
  *
  * @param {rmcall_t*} _inst         : 要操作的RMCALL实例。
- * @return {mstatus_t} : 成功返回mstatus_Success，异常返回mstatus_Fail。
+ * @return {mstatus_t} : 成功返回mStatus_Success，异常返回mStatus_Fail。
  */
 mstatus_t RMCALL_CommandRecvDisable(rmcall_t *_inst);
 
@@ -225,9 +235,12 @@ mstatus_t RMCALL_CommandRecvDisable(rmcall_t *_inst);
 void RMCALL_TxIsr(rmcall_t *_inst);
 void RMCALL_RxIsr(rmcall_t *_inst);
 
+#ifdef __cplusplus
+}
+#endif
 
 /* @} */
 
 #endif // CMODULE_USE_RMCALL
 
-#endif // ! _SYS_RMCALL_HPP_
+#endif // ! SYS_RMCALL_H

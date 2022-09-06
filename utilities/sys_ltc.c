@@ -1,5 +1,9 @@
 #include "sys_ltc.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if (defined(CMODULE_USE_LTC) && (CMODULE_USE_LTC != 0U))
 
 uint64_t LTC_GetTime_us(void)
@@ -29,5 +33,9 @@ void LTC_Delay_ms(uint64_t _t)
     uint64_t cnt = PITMGR_GetLTC() + MSEC_TO_COUNT(_t, CMODULE_LTC_CLKFREQ);
     while (PITMGR_GetLTC() < cnt);
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // ! CMODULE_USE_LTC

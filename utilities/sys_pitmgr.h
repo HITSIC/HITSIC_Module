@@ -30,8 +30,8 @@
  */
 
 #pragma once
-#ifndef UTILITIES_SYS_PITMGR_HPP
-#define UTILITIES_SYS_PITMGR_HPP
+#ifndef UTILITIES_SYS_PITMGR_H
+#define UTILITIES_SYS_PITMGR_H
 #include "cmodule_common.h"
 
 #if defined(CMODULE_USE_PITMGR) && (CMODULE_USE_PITMGR > 0)
@@ -44,7 +44,7 @@
  */
 
 /** @brief : 软件版本 */
-#define SYS_PITMGR_VERSION (CMODULE_CMODULE_MAKE_VERSION(2U, 0U, 0U))
+#define SYS_PITMGR_VERSION (CMODULE_MAKE_VERSION(2U, 0U, 0U))
 
 #ifdef __cplusplus
 extern "C" {
@@ -88,7 +88,7 @@ typedef struct _pitmgr
  * @brief : PITMGR初始化。
  *  初始化变量、PIT外设、PIT中断。
  *
- * @return {mstatus_t} : 成功返回mstatus_Success，异常返回mstatus_Fail。
+ * @return {mstatus_t} : 成功返回mStatus_Success，异常返回mStatus_Fail。
  */
 mstatus_t PITMGR_Init(pitmgr_t *_inst, uint32_t _period_us);
 
@@ -105,7 +105,7 @@ void PITMGR_Isr(pitmgr_t *_inst);
  *
  * @param {pitmgr_t*} _inst          : 要操作的PITMGR实例。
  * @param {pitmgr_handle_t*} _handle : 该PITMGR任务的任务描述符指针。
- * @return {mstatus_t}                : 成功返回mstatus_Success，异常返回mstatus_Fail。
+ * @return {mstatus_t}                : 成功返回mStatus_Success，异常返回mStatus_Fail。
  */
 mstatus_t PITMGR_HandleInsert(pitmgr_t *_inst, pitmgr_handle_t *_handle);
 
@@ -114,7 +114,7 @@ mstatus_t PITMGR_HandleInsert(pitmgr_t *_inst, pitmgr_handle_t *_handle);
  *
  * @param {pitmgr_t*} _inst          : 要操作的PITMGR实例。
  * @param {pitmgr_handle_t*} _handle : 该PITMGR任务的任务描述符指针。
- * @return {mstatus_t}                : 成功返回mstatus_Success，异常返回mstatus_Fail。
+ * @return {mstatus_t}                : 成功返回mStatus_Success，异常返回mStatus_Fail。
  */
 mstatus_t PITMGR_HandleRemove(pitmgr_t *_inst, pitmgr_handle_t *_handle);
 
@@ -127,4 +127,4 @@ mstatus_t PITMGR_HandleRemove(pitmgr_t *_inst, pitmgr_handle_t *_handle);
 
 #endif // ! CMODULE_USE_PITMGR
 
-#endif // ! UTILITIES_SYS_PITMGR_HPP
+#endif // ! UTILITIES_SYS_PITMGR_H

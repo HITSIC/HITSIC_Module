@@ -76,17 +76,9 @@ void ADRCCTRL_Update(adrc_t* p);
 //更新一次adrc控制，只不过是非线性d(根据误差微分大小动态调整kd,d_line是调整的分界线，具体请检查代码)
 void ADRCCTRL_UpdateFal(adrc_t* p, float d_line);
 
-
-
-
-
-
-
 #ifdef __cplusplus
 }
 #endif
-
-
 
 #endif // ! UTILITIES_LIB_ADRCCTRL_H
 

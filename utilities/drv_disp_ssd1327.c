@@ -6,6 +6,10 @@
 #define SYSLOG_LVL  (3U)
 #include <inc_syslog.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void DISP_SSD1327_WriteDat(uint8_t data)
 {
     DISP_SPIBUS_gpioSetD_C(1);
@@ -148,6 +152,9 @@ void DISP_SSD1327_BufferUpload(disp_ssd1327_fb_t *_fb)
     DISP_SPIBUS_spiWrite((uint8_t*)_fb, sizeof(disp_ssd1327_fb_t));
 }
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif // ! CMODULE_USE_DISP_SSD1327
 

@@ -186,7 +186,6 @@ int main() {
 }
 #endif
 
-
 #if defined (__cplusplus)
 }
 #endif

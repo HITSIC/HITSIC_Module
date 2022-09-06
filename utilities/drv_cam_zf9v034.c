@@ -13,6 +13,10 @@
 
 uint16_t camera_version;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void CAM_ZF9V034_GetDefaultConfig(cam_zf9v034_configPacket_t *config)
 {
     SYSLOG_I("Generate ZF9V034 config data.");
@@ -56,7 +60,7 @@ void CAM_ZF9V034_CfgWrite(const cam_zf9v034_configPacket_t *config)
 	do {
 	    SYSLOG_D("Attempt to get response.");
 	    camera_uartTxBuf[0] = 0;
-		if(mstatus_Success != CAM_ZF9V034_UartRxBlocking(camera_uartTxBuf, 1))
+		if(mStatus_Success != CAM_ZF9V034_UartRxBlocking(camera_uartTxBuf, 1))
 		{
 		    SYSLOG_W("Failed to get response.");
 		}
@@ -131,6 +135,10 @@ void CAM_ZF9V034_GetReceiverConfig(receiver_config_type *config, const cam_zf9v0
 #elif(defined(ZF9V034_USE_RTCSI) && (ZF9V034_USE_RTCSI > 0U))
 void CAM_ZF9V034_GetReceiverConfig(receiver_config_type *config, const cam_zf9v034_configPacket_t *camConfig); //FIXME
 #endif // ! Receiver Config
+
+#ifdef __cplusplus
+}
+#endif
 
 /* @} */
 

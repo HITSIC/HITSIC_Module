@@ -36,7 +36,7 @@
 
 #ifndef _CMB_CFG_H_
 #define _CMB_CFG_H_
-#include "stdio.h"
+#include <stdio.h>
 
 /* print line, must config by user */
 #define cmb_println(...)               printf(__VA_ARGS__);printf("\r\n")

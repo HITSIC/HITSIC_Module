@@ -11,7 +11,6 @@
 extern "C" {
 #endif
 
-
 mstatus_t PITMGR_Init(pitmgr_t *_inst, uint32_t _period_us)
 {
     assert(_inst);
@@ -26,7 +25,7 @@ mstatus_t PITMGR_Init(pitmgr_t *_inst, uint32_t _period_us)
 
     HAL_ExitCritical();
 
-    return mstatus_Success;
+    return mStatus_Success;
 }
 
 void PITMGR_Deinit(pitmgr_t *_inst)
@@ -71,7 +70,7 @@ mstatus_t PITMGR_HandleInsert(pitmgr_t *_inst, pitmgr_handle_t *_handle)
     pitmgr_isrList_push_back(_inst->isrList, _handle);
     HAL_ExitCritical();
 
-    return mstatus_Success;
+    return mStatus_Success;
 }
 
 
@@ -85,13 +84,12 @@ mstatus_t PITMGR_HandleRemove(pitmgr_t *_inst, pitmgr_handle_t *_handle)
         {
             pitmgr_isrList_remove(_inst->isrList, it);
             HAL_ExitCritical();
-            return mstatus_Success;
+            return mStatus_Success;
         }
     }
     HAL_ExitCritical();
-    return mstatus_Fail;
+    return mStatus_Fail;
 }
-
 
 #ifdef __cplusplus
 }

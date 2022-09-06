@@ -5,6 +5,10 @@
  * @{
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief 设置PID结构体参数
  *
@@ -218,6 +222,10 @@ float PID2CTRL_UpdateByDiffeAndCalcPID(pid2Ctrl_t *_pid, float _diff)
 {
     return PIDCTRL_UpdateAndCalcPID(&_pid->inner, PIDCTRL_UpdateByDiffAndCalcPID(&_pid->outer, _diff));
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 /* @} */
 

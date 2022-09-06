@@ -45,12 +45,11 @@
  */
 
 /** @brief : 软件版本 */
-#define LIB_LIST_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 1U))
+#define LIB_LIST_VERSION (CMODULE_MAKE_VERSION(0U, 1U, 1U))
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 // Library version
 #define LIST_VERSION "0.1.5"
@@ -214,8 +213,6 @@ list_node_t* List_ItBegin(list_t *p);
  * @param  {list_t*} p    : list对象句柄。
  */
 list_node_t* List_ItEnd(list_t *p);
-
-
 
 #ifdef __cplusplus
 }

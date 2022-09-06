@@ -24,7 +24,7 @@
  */
 
  /** @brief : 软件版本 */
-#define LIB_GRAPHIC_FONT_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
+#define LIB_GRAPHIC_FONT_VERSION (CMODULE_MAKE_VERSION(0U, 1U, 0U))
 
 #if 0 // FIXME
 // begin is the first , endin is the one after the last.

@@ -1,7 +1,7 @@
 #ifndef D_IMXRT1052_SYS_PITMGR_PORT_H
 #define D_IMXRT1052_SYS_PITMGR_PORT_H
 
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 
 #if defined(CMODULE_USE_PITMGR) && (CMODULE_USE_PITMGR > 0)
 

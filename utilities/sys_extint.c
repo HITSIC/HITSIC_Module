@@ -57,7 +57,7 @@ mstatus_t EXTINT_HandleInsert(extint_t *_inst, extint_handle_t *_handle)
     extint_isrList_push_back(_inst->isrList, _handle);
     HAL_ExitCritical();
 
-    return mstatus_Success;
+    return mStatus_Success;
 }
 
 
@@ -71,11 +71,11 @@ mstatus_t EXTINT_HandleRemove(extint_t *_inst, extint_handle_t *_handle)
         {
             extint_isrList_remove(_inst->isrList, it);
             HAL_ExitCritical();
-            return mstatus_Success;
+            return mStatus_Success;
         }
     }
     HAL_ExitCritical();
-    return mstatus_Fail;
+    return mStatus_Fail;
 }
 
 #ifdef __cplusplus

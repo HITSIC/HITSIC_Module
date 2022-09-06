@@ -19,7 +19,7 @@ inline void CAM_ZF9V034_UnitTestDmaCallback(edma_handle_t *handle, void *userDat
 
     result = DMADVP_TransferStart(dmadvpHandle->base, dmadvpHandle);
     //PRINTF("new full buffer: 0x%-8.8x = 0x%-8.8x\n", handle->fullBuffer.front(), handle->xferCfg.destAddr);
-    if(mstatus_Success != result)
+    if(mStatus_Success != result)
     {
         DMADVP_TransferStop(dmadvpHandle->base, dmadvpHandle);
         PRINTF("[E]DMADVP.TEST: transfer stop! insufficent buffer\n");
@@ -60,7 +60,7 @@ inline void CAM_ZF9V034_UnitTest(void)
     PRINTF("[D]DMADVP.TEST: Begin time: %d ms.\n", CAM_ZF9V034_TEST_TIMER_MS);
     for(int time = 0; time < 512; ++time){
     PRINTF("[D]DMADVP.TEST: Transfer %4.4d.\n", time);
-    while(mstatus_Success != DMADVP_TransferGetFullBuffer(DMADVP0, &dmadvpHandle, &fullBuffer));
+    while(mStatus_Success != DMADVP_TransferGetFullBuffer(DMADVP0, &dmadvpHandle, &fullBuffer));
 
     //memset((void*)dispBuffer, 0x00, 8 * 128);
     DISP_SSD1306_FB_Clear(testDispBuffer);

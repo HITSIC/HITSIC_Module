@@ -2,7 +2,7 @@
 #define D_MK24F12_INC_SYSLOG_PORT_H
 
 #include "cmodule_common.h"
-#include "stdio.h"
+#include <stdio.h>
 
 #ifdef DEBUG
 #define SYSLOG_DEBUG

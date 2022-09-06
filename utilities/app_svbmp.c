@@ -126,7 +126,9 @@ const BITMAPRGBHEADER bmp_rgb_color_palette = {
 
 BITMAPINFOHEADER bmih;
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 int SVBMP_Save(svbmp_file_t* fp, svbmp_img_t* img)
 {
@@ -183,6 +185,10 @@ int SVBMP_Save(svbmp_file_t* fp, svbmp_img_t* img)
 	}
 	return 0;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 /* @} */
 

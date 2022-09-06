@@ -92,7 +92,7 @@ by CkovMk @hitsic 2018.12.23
 
 - **初始化函数 `mstatus_t EXTINT_Init(extint_t *_inst);`**
 
-  该函数用于初始化EXTINT。调用该函数时，该函数会清空任务列表。当前版本中本函数总是返回`mstatus_Success`。
+  该函数用于初始化EXTINT。调用该函数时，该函数会清空任务列表。当前版本中本函数总是返回`mStatus_Success`。
 
 - **解初始化函数 `void EXTINT_Deinit(extint_t *_inst);`**
 
@@ -100,11 +100,11 @@ by CkovMk @hitsic 2018.12.23
 
   该函数用于向任务列表中插入一个任务。
 
-  返回值：成功返回mstatus_Success，异常返回mstatus_Fail。
+  返回值：成功返回mStatus_Success，异常返回mStatus_Fail。
 
 - **移除任务 `mstatus_t EXTINT_HandleRemove(extint_t *_inst, extint_handle_t *_handle);`**
 
-  该函数用于移除任务。如果任务存在且成功移除则返回`mstatus_Success`，如果任务不存在或移除失败，则返回`mstatus_Fail`。
+  该函数用于移除任务。如果任务存在且成功移除则返回`mStatus_Success`，如果任务不存在或移除失败，则返回`mStatus_Fail`。
 
 - **服务接口 `EXTINT_Isr(extint_t *_inst, uint32_t flag)`**
 
@@ -163,13 +163,13 @@ by CkovMk @hitsic 2018.12.23
 
   调用`mstatus_t EXTINT_HandleInsert(extint_t *_inst, extint_handle_t *_handle);`函数，即可注册该服务函数。执行此函数不会修改服务描述符。
 
-  成功返回mstatus_Success，异常返回mstatus_Fail。
+  成功返回mStatus_Success，异常返回mStatus_Fail。
 
 - 从列表中删除服务函数
 
   调用`mstatus_t EXTINT_HandleRemove(extint_t *_inst, extint_handle_t *_handle);`函数，即可取消该服务描述符。执行此函数不会修改服务描述符。
 
-  成功返回mstatus_Success，异常返回mstatus_Fail。
+  成功返回mStatus_Success，异常返回mStatus_Fail。
 
 
 

@@ -19,6 +19,10 @@
 宏定义
 *********************************************************************************************************************/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //#define OLED_SSD1306_Brightness 0xCF
 
 void DISP_SSD1306_WriteDat(uint8_t data)
@@ -239,5 +243,8 @@ void DISP_SSD1306_BufferUploadDMA(uint8_t *buffer)
 
 #endif // ! CMODULE_DISP_SSD1306_DMA
 
-#endif // ! CMODULE_USE_DISP_SSD1306
+#ifdef __cplusplus
+}
+#endif
 
+#endif // ! CMODULE_USE_DISP_SSD1306

@@ -1,6 +1,6 @@
 #ifndef D_IMXRT1052_SYS_RMCALL_PORT_H
 #define D_IMXRT1052_SYS_RMCALL_PORT_H
-#include "hitsic_common.h"
+#include "cmodule_common.h"
 #include "peripherals.h"
 //#include "inc_stdlib.h"
 

@@ -30,8 +30,8 @@
  */
 
 #pragma once
-#ifndef UTILITIES_DRV_DISP_SSD1306_HPP
-#define UTILITIES_DRV_DISP_SSD1306_HPP
+#ifndef UTILITIES_DRV_DISP_SSD1306_H
+#define UTILITIES_DRV_DISP_SSD1306_H
 #include <inc_stdlib.h>
 #include "cmodule_common.h"
 
@@ -40,10 +40,14 @@
 #include <lib_graphic.h>
 
 /** @brief : 软件版本 */
-#define DRV_DISP_SSD1306_VERSION (CMODULE_CMODULE_MAKE_VERSION(1U, 0U, 0U))
+#define DRV_DISP_SSD1306_VERSION (CMODULE_MAKE_VERSION(1U, 0U, 0U))
 
 extern const uint8_t DISP_font_6x8[][6];
 extern const uint8_t DISP_font_8x16[][16];
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      OLED初始化函数
@@ -132,6 +136,10 @@ GRAPHIC_FB_MONO_DEF(disp_ssd1306, DISP_SSD1306, 64, 128)
 
 GRAPHIC_FB_PRINT0608_DEF(disp_ssd1306, DISP_SSD1306)
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif // ! CMODULE_USE_DISP_SSD1306
 
-#endif // ! UTILITIES_DRV_DISP_SSD1306_HPP
+#endif // ! UTILITIES_DRV_DISP_SSD1306_H

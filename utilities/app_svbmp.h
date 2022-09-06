@@ -23,8 +23,8 @@
  *
  */
 
-#ifndef UTILITIES_APP_SVBMP_HPP
-#define UTILITIES_APP_SVBMP_HPP
+#ifndef UTILITIES_APP_SVBMP_H
+#define UTILITIES_APP_SVBMP_H
 #include <inc_stdlib.h>
 #include "cmodule_common.h"
 
@@ -37,7 +37,7 @@
   */
 
 /** @brief : 软件版本 */
-#define APP_SVBMP_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
+#define APP_SVBMP_VERSION (CMODULE_MAKE_VERSION(0U, 1U, 0U))
 
 typedef enum _camera_pixel_format
 {
@@ -53,10 +53,18 @@ typedef struct __img {
     void* pImg;
 }svbmp_img_t;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int SVBMP_Save(svbmp_file_t* fp, svbmp_img_t* img);
+
+#ifdef __cplusplus
+}
+#endif
 
 /* @} */
 
 #endif // ! CMODULE_USE_APP_SVBMP
 
-#endif // ! UTILITIES_APP_SVBMP_HPP
+#endif // ! UTILITIES_APP_SVBMP_H

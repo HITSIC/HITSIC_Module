@@ -76,7 +76,7 @@ EfErrCode ef_port_read(uint32_t addr, uint32_t *buf, size_t size)
 
 	/* You can add your code under here. */
 	EF_INFO("Verbose: Read Addr 0x%8.8x, Size %4.4d bytes\n", addr, size);
-	if (mstatus_FTFx_Success != FLASH_AddressRead(addr, (uint8_t *)buf, size))
+	if (kStatus_FTFx_Success != FLASH_AddressRead(addr, (uint8_t *)buf, size))
 	{
 		result = EF_READ_ERR;
 		EF_INFO("Warning: Read Failed !\n");
@@ -108,7 +108,7 @@ EfErrCode ef_port_erase(uint32_t addr, size_t size)
 	for (int32_t i = 0; i < sectorNum; ++i)
 	{
 		EF_INFO("Verbose: Erase Addr 0x%8.8x, Size %4.4d bytes\n", addr, size);
-		if (mstatus_FTFx_Success != FLASH_SectorErase(addr / EF_ERASE_MIN_SIZE + i))
+		if (kStatus_FTFx_Success != FLASH_SectorErase(addr / EF_ERASE_MIN_SIZE + i))
 		{
 			result = EF_ERASE_ERR;
 			EF_INFO("Warning: Erase Failed !\n");
@@ -136,7 +136,7 @@ EfErrCode ef_port_write(uint32_t addr, const uint32_t *buf, size_t size)
 
 	/* You can add your code under here. */
 	EF_INFO("Verbose: Write Addr 0x%8.8x, Size %4.4d bytes\n", addr, size);
-	if (mstatus_FTFx_Success != FLASH_AddressProgram(addr, (uint8_t *)buf, size))
+	if (kStatus_FTFx_Success != FLASH_AddressProgram(addr, (uint8_t *)buf, size))
 	{
 		result = EF_WRITE_ERR;
 		EF_INFO("Warning: Write Failed !\n");

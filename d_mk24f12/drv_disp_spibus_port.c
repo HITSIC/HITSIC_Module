@@ -69,7 +69,7 @@ mstatus_t DISP_SSD1306_spiDmaInit(void)
                                             &disp_dspiEdmaMasterTxDataToIntermediaryHandle,
                                             &disp_dspiEdmaMasterIntermediaryToTxRegHandle);
     #endif
-        return mstatus_Success;
+        return mStatus_Success;
 }
 
 mstatus_t DISP_SPIBUS_spiDmaWrite(uint8_t* data, uint32_t size)
@@ -81,7 +81,7 @@ mstatus_t DISP_SPIBUS_spiDmaWrite(uint8_t* data, uint32_t size)
 
 void DISP_SPIBUS_spiDmaWriteCallback(SPI_Type *base, dspi_master_edma_handle_t *handle, mstatus_t status, void *userData)
 {
-    if (status == mstatus_Success)
+    if (status == mStatus_Success)
     {
         //PRINTF("This is DSPI master edma transfer completed callback. \r\n\r\n");
     }

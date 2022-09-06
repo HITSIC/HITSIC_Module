@@ -10,7 +10,11 @@
  */
 
 /** @brief : 软件版本 */
-//#define LIB_CRC32_VERSION (CMODULE_CMODULE_MAKE_VERSION(0U, 1U, 0U))
+//#define LIB_CRC32_VERSION (CMODULE_MAKE_VERSION(0U, 1U, 0U))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief Compute the 32-bit CRC.
@@ -32,6 +36,10 @@
  * @return uint32_t CRC result.
  */
 uint32_t CRC32_Calculate (void const *data, int32_t len, uint32_t init);
+
+#ifdef __cplusplus
+}
+#endif
 
 /*! @} */
 

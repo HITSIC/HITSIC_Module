@@ -25,7 +25,7 @@
 /**
  * @brief : 软件版本产生方式定义
  */
-#define CMODULE_CMODULE_MAKE_VERSION(major, minor, patch) (((major) << 16) | ((minor) << 8) | (patch))
+#define CMODULE_MAKE_VERSION(major, minor, patch) (((major) << 16) | ((minor) << 8) | (patch))
 #define CMODULE_VERSION_MAJOR(x) (x >> 16U)
 #define CMODULE_VERSION_MINOR(x) ((x >> 8U) & 0xffU)
 #define CMODULE_VERSION_PATCH(x) (x & 0xffU)

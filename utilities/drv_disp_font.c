@@ -276,6 +276,10 @@ extern const uint8_t DISP_image_100thAnniversary[8][128] =
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,/*"D:\Desktop\100Logo_Rst12864.bmp",0*/
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 inline uint8_t DISP_FONT_DummyFunction0(void)
 {
     uint8_t dummy = DISP_font_6x8[0][0];
@@ -283,3 +287,7 @@ inline uint8_t DISP_FONT_DummyFunction0(void)
     dummy = DISP_image_100thAnniversary[0][0];
     return dummy;
 }
+
+#ifdef __cplusplus
+}
+#endif

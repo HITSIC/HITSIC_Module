@@ -23,7 +23,11 @@
 
 
 /** @brief : 软件版本 */
-#define SYS_LTC_VERSION (CMODULE_CMODULE_MAKE_VERSION(1U, 0U, 0U))
+#define SYS_LTC_VERSION (CMODULE_MAKE_VERSION(1U, 0U, 0U))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 uint64_t LTC_GetTime(void);
 
@@ -65,6 +69,10 @@ void LTC_Delay_us(uint64_t _t);
  * @param : {uint64_t} _t : 要延迟的毫秒数
  */
 void LTC_Delay_ms(uint64_t _t);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // ! CMODULE_USE_LTC
 
